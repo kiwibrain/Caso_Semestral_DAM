@@ -1,7 +1,7 @@
 package com.duoc.prerenderrack.model
 
-sealed class CargoUsuario {
-    object Supervisor : CargoUsuario()
-    object Inspector : CargoUsuario()
-    object OperadorTecnico : CargoUsuario()
+sealed class CargoUsuario(val nombre:String) {
+    object Supervisor : CargoUsuario("Supervisor")
+    object Inspector : CargoUsuario("Inspector")
+    object OperadorTecnico : CargoUsuario("Operador Tecnico")
 }
