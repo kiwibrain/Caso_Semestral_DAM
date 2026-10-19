@@ -47,6 +47,7 @@ fun Navegacion(){
     NavHost(navController = navController, startDestination = "pantalla_inicial"){
         composable("pantalla_inicial") { PantallaInicial(navController)}
         composable("pantalla_login") { PantallaLogin(navController)}
+        composable("menu-inspector") {MenuInspector(navController)}
         //agregar mas pantallas mas tarde
     }
 }
@@ -219,8 +220,7 @@ fun PantallaLogin(navController: NavController){
 
         Button(
             onClick = {
-                //Proceso de validacion de login
-            },
+                navController.navigate("menu-inspector")},
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
             modifier = Modifier.fillMaxWidth().height(50.dp)
         ) {
@@ -244,3 +244,81 @@ fun PantallaLogin(navController: NavController){
     }//Fin Column
 
 }//Fin PantallaLogin
+
+
+@Composable
+fun MenuInspector(navController: NavController){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF88BBFF))
+    ) {
+        //Box encabezado
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .background(Color(0xFF3B59C8)),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Text(
+                text = "nombre del inspector",
+                color = Color.White,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold
+            )//Fin text
+        }//Fin box encabezado
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row() {
+            Text(
+                text = "Sistema de Registro Racks",
+                color = Color.Black,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        //Box boton ingresar registro
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 60.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Button(
+                onClick = {
+                    //enlace a creacion de nuevo registro
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
+                shape = RoundedCornerShape(24.dp),
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .height(50.dp)
+            ) {
+                Text(
+                    text = "NUEVO REGISTRO",
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+        }//fin box Boton ingresar registro
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {navController.navigate("pantalla_login")},
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
+        ) {
+            Text(
+                text = "Volver",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }//Fin boton volver
+
+    }//fin column
+
+}//fin menu inspector
