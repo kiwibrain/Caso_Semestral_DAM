@@ -18,6 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -155,7 +156,10 @@ fun PantallaLogin(navController: NavController){
                 shape = RoundedCornerShape(25.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White
+                    unfocusedContainerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    cursorColor = Color.Black,
                 )//fin colors
 
             )//Fin text field correo
@@ -178,7 +182,10 @@ fun PantallaLogin(navController: NavController){
                 shape = RoundedCornerShape(25.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White
+                    unfocusedContainerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    cursorColor = Color.Black
                 )//fin colors
 
             )//Fin text field contraseña
@@ -201,7 +208,11 @@ fun PantallaLogin(navController: NavController){
                 ) {
                     RadioButton(
                         selected = cargoSeleccionado == cargoUsuario,
-                        onClick = {cargoSeleccionado = cargoUsuario}
+                        onClick = {cargoSeleccionado = cargoUsuario},
+                        colors = RadioButtonDefaults.colors(
+                            selectedColor = Color(0xFF0F172A),
+                            unselectedColor = Color(0xFF0F172A)
+                        )
                     )//Fin RadioButton
                     Spacer(modifier = Modifier.height(14.dp))
                     Text(
