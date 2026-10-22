@@ -49,6 +49,7 @@ fun Navegacion(){
         composable("pantalla_inicial") { PantallaInicial(navController)}
         composable("pantalla_login") { PantallaLogin(navController)}
         composable("menu-inspector") {MenuInspector(navController)}
+        composable("pantalla_camara") {CamaraFotos()}
         //agregar mas pantallas mas tarde
     }
 }
@@ -317,6 +318,18 @@ fun MenuInspector(navController: NavController){
 
         }//fin box Boton ingresar registro
         Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {navController.navigate("pantalla_camara")},
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
+        ) {
+            Text(
+                text = "Camara",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
         Button(
             onClick = {navController.navigate("pantalla_login")},
