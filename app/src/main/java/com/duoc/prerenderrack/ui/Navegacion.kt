@@ -13,7 +13,7 @@ fun Navegacion(){
         composable("pantalla_inicial") { PantallaInicial(navController)}
         composable("pantalla_login") { PantallaLogin(navController)}
         composable("menu-inspector") {MenuInspector(navController)}
-        composable("pantalla_camara") {CamaraFotos()}
+        composable("nuevo_registro") {VistaNuevoRegistro(navController)}
         //agregar mas pantallas mas tarde
     }
 }
