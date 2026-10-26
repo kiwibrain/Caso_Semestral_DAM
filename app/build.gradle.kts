@@ -58,7 +58,6 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
 
-    // Procesador de anotaciones (KSP o KAPT)
-    // Nota: Si usas KSP, cambia 'annotationProcessor' por 'ksp'
+    // Procesador de anotaciones (KAPT)
     annotationProcessor("androidx.room:room-compiler:2.6.1")
 }
