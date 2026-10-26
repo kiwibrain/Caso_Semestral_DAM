@@ -70,7 +70,7 @@ fun MenuSupervisor(navController: NavController, nombreSupervisor: String = "nom
         ) {
             Button(
                 onClick = {
-                    // enlace a creacion de nuevo registro
+                    navController.navigate("nuevo_registro")
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
                 shape = RoundedCornerShape(24.dp),
@@ -114,30 +114,6 @@ fun MenuSupervisor(navController: NavController, nombreSupervisor: String = "nom
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        // Botón Cámara
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Button(
-                onClick = { navController.navigate("pantalla_camara") },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
-                shape = RoundedCornerShape(24.dp),
-                modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .height(50.dp)
-            ) {
-                Text(
-                    text = "Cámara",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
 
         // Botón Volver
         Box(

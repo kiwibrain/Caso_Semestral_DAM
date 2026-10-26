@@ -64,7 +64,7 @@ fun MenuInspector(navController: NavController){
         ) {
             Button(
                 onClick = {
-                    //enlace a creacion de nuevo registro
+                    navController.navigate("nuevo_registro")
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
                 shape = RoundedCornerShape(24.dp),
@@ -83,17 +83,7 @@ fun MenuInspector(navController: NavController){
         }//fin box Boton ingresar registro
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            onClick = {navController.navigate("pantalla_camara")},
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
-        ) {
-            Text(
-                text = "Camara",
-                color = Color.White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
+
 
         Button(
             onClick = {navController.navigate("pantalla_login")},
