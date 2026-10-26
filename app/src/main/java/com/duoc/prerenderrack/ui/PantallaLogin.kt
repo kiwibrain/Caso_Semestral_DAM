@@ -36,12 +36,6 @@ fun PantallaLogin(navController: NavController){
 
     var correo by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
-    val opcionesCargo = listOf(
-        CargoUsuario.Supervisor,
-        CargoUsuario.Inspector,
-        CargoUsuario.OperadorTecnico
-    )
-    var cargoSeleccionado by remember { mutableStateOf<CargoUsuario>(CargoUsuario.Supervisor) }
 
     Column(
         modifier = Modifier
@@ -116,40 +110,7 @@ fun PantallaLogin(navController: NavController){
 
             )//Fin text field contraseña
 
-            //cargo
-            Text("Cargo:",
-                color = Color(0xFF1E2749),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 6.dp)
-            )//Fin text
 
-            //opciones de cargo con radioButton
-            opcionesCargo.forEach { cargoUsuario ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    RadioButton(
-                        selected = cargoSeleccionado == cargoUsuario,
-                        onClick = {cargoSeleccionado = cargoUsuario},
-                        colors = RadioButtonDefaults.colors(
-                            selectedColor = Color(0xFF0F172A),
-                            unselectedColor = Color(0xFF0F172A)
-                        )
-                    )//Fin RadioButton
-                    Spacer(modifier = Modifier.height(14.dp))
-                    Text(
-                        text = cargoUsuario.nombre,
-                        color = Color(0xFF1E2749),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }//Fin row
-
-            }//fin opciones cargos
 
         }//Fin formulario
 
