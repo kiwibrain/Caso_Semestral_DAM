@@ -1,5 +1,6 @@
 package com.duoc.prerenderrack.ui
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,6 +26,9 @@ import androidx.navigation.NavController
 
 @Composable
 fun MenuSupervisor(navController: NavController, nombreSupervisor: String = "nombre del supervisor"){
+    val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -122,12 +127,14 @@ fun MenuSupervisor(navController: NavController, nombreSupervisor: String = "nom
             contentAlignment = Alignment.Center
         ) {
             Button(
-                onClick = { navController.navigate("pantalla_login") },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
-                shape = RoundedCornerShape(24.dp),
-                modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .height(50.dp)
+                onClick = {
+                    // BORRAR SESIÓN AL SALIR
+                    sharedPreferences.edit().clear().apply()
+                    navController.navigate("pantalla_login") {
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
             ) {
                 Text(
                     text = "Volver",
@@ -136,6 +143,7 @@ fun MenuSupervisor(navController: NavController, nombreSupervisor: String = "nom
                     fontWeight = FontWeight.Bold
                 )
             }
+
         }
 
     }

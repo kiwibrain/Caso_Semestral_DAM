@@ -1,5 +1,6 @@
 package com.duoc.prerenderrack.ui
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,10 +15,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,6 +30,25 @@ import com.duoc.prerenderrack.R
 
 @Composable
 fun PantallaInicial(navController: NavController){
+    val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    val savedUser = sharedPreferences.getString("logged_user", null)
+
+    // Evaluar automáticamente si ya hay una sesión activa al abrir la app
+    LaunchedEffect(savedUser) {
+        if (savedUser != null) {
+            if (savedUser == "inspector@duoc.cl") {
+                navController.navigate("menu-inspector") {
+                    popUpTo("pantalla_inicial") { inclusive = true }
+                }
+            } else if (savedUser == "supervisor@duoc.cl") {
+                navController.navigate("menu-supervisor") {
+                    popUpTo("pantalla_inicial") { inclusive = true }
+                }
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,9 +68,8 @@ fun PantallaInicial(navController: NavController){
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Fit
             )
-        }//fin box imagen
+        }
 
-        //Box boton iniciar sesion
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -56,7 +77,7 @@ fun PantallaInicial(navController: NavController){
             contentAlignment = Alignment.Center
         ) {
             Button(
-                onClick = {navController.navigate("pantalla_login")},
+                onClick = { navController.navigate("pantalla_login") },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
                 shape = RoundedCornerShape(24.dp),
                 modifier = Modifier
@@ -70,9 +91,6 @@ fun PantallaInicial(navController: NavController){
                     fontWeight = FontWeight.Bold
                 )
             }
-
-        }//fin box Boton iniciar sesion
-
-    }//fin column
-
-}//fin fun pantalla inicial
+        }
+    }
+}

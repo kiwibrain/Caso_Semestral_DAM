@@ -1,5 +1,6 @@
 package com.duoc.prerenderrack.ui
 
+import android.content.Context // <-- Importante
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext // <-- Importante
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,7 +32,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 
 @Composable
 fun PantallaLogin(navController: NavController){
-
+    val context = LocalContext.current // <-- Obtener contexto
+    val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE) // <-- Instanciar preferencias
 
     var modalError by remember { mutableStateOf(false) }
     var correo by remember { mutableStateOf("") }
@@ -54,21 +57,20 @@ fun PantallaLogin(navController: NavController){
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
-            )//Fin text
-        }//Fin box encabezado
+            )
+        }
 
         //Formulario
-        Column() {
-            //correo
+        Column {
             Text("Correo:",
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 6.dp)
-            )//Fin text
+            )
             OutlinedTextField(
                 value = correo,
-                onValueChange = {correo = it},
+                onValueChange = { correo = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp),
@@ -79,22 +81,20 @@ fun PantallaLogin(navController: NavController){
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
                     cursorColor = Color.Black,
-                )//fin colors
-
-            )//Fin text field correo
+                )
+            )
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            //contraseña
             Text("Contraseña:",
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 6.dp)
-            )//Fin text
+            )
             OutlinedTextField(
                 value = contrasena,
-                onValueChange = {contrasena = it},
+                onValueChange = { contrasena = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp),
@@ -105,40 +105,43 @@ fun PantallaLogin(navController: NavController){
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
                     cursorColor = Color.Black
-                ),//fin colors
-
-                //transform para contraseña censurada
+                ),
                 visualTransformation = PasswordVisualTransformation()
-            )//Fin text field contraseña
-
-
-
-        }//Fin formulario
+            )
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
             onClick = {
-            if (correo == "inspector@duoc.cl" && contrasena == "1234"){
-                navController.navigate("menu-inspector")
-            }else if (correo == "supervisor@duoc.cl" && contrasena == "4321"){
-                navController.navigate("menu-supervisor")
-            }else{
-                println("credenciales incorrectas")
-                modalError = true
-            }
-            //insertar animacion de carga con delay
+                if (correo == "inspector@duoc.cl" && contrasena == "1234"){
+                    // GUARDAR SESIÓN LOCALMENTE
+                    sharedPreferences.edit().putString("logged_user", correo).apply()
+
+                    navController.navigate("menu-inspector") {
+                        popUpTo("pantalla_login") { inclusive = true }
+                    }
+                } else if (correo == "supervisor@duoc.cl" && contrasena == "4321"){
+                    // GUARDAR SESIÓN LOCALMENTE
+                    sharedPreferences.edit().putString("logged_user", correo).apply()
+
+                    navController.navigate("menu-supervisor") {
+                        popUpTo("pantalla_login") { inclusive = true }
+                    }
+                } else {
+                    modalError = true
+                }
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
             modifier = Modifier.fillMaxWidth().height(50.dp)
         ) {
             Text("Ingresar", color = Color.White)
-        }//Fin Button
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {navController.navigate("pantalla_inicial")},
+            onClick = { navController.navigate("pantalla_inicial") },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
         ) {
             Text(
@@ -147,18 +150,14 @@ fun PantallaLogin(navController: NavController){
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
-        }//Fin boton volver
+        }
+    }
 
-    }//Fin Column
-
-    //modal inicio sesión
     if (modalError){
         ModalAlerta(
             titulo = "Error",
             mensaje = "Credenciales incorrectas",
-            onDismiss = {modalError = false}
+            onDismiss = { modalError = false }
         )
-    }//fin if modalError
-
-}//Fin PantallaLogin
-
+    }
+}
