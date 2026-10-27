@@ -15,6 +15,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -40,6 +41,11 @@ fun VistaNuevoRegistro(navController: NavController) {
     var responsable by remember { mutableStateOf("") }
     var estadoActual by remember { mutableStateOf("") }
     var descipcion by remember { mutableStateOf("") }
+    val estadoRevision = listOf(
+        "Pendiente",
+        "En Revision",
+        "Finalizado")
+    var estadoSeleccionado by remember {mutableStateOf(0)}
 
     // Lanzador de cámara
     val takePictureLauncher = rememberLauncherForActivityResult(
@@ -266,41 +272,59 @@ fun VistaNuevoRegistro(navController: NavController) {
                     Text("Tomar foto del Rack")
                 }
 
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    estadoRevision.forEachIndexed { index, opcion ->
+                        Row(verticalAlignment = Alignment.CenterVertically){
+                            RadioButton(
+                                selected = estadoSeleccionado == index,
+                                onClick = {estadoSeleccionado = index}
+                            )
+                            Text(opcion)
+                        }
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Button(
-                    onClick = { navController.navigate("menu-inspector") },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
-                    modifier = Modifier.fillMaxWidth()
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        text = "Guardar",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Button(
+                        onClick = { navController.popBackStack() },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
+                    ) {
+                        Text(
+                            text = "Guardar",
+                            color = Color.White,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    //Fin boton guardar
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    Button(
+                        onClick = { navController.popBackStack() },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
+                    ) {
+                        Text(
+                            text = "Volver",
+                            color = Color.White,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    //Fin boton volver
                 }
-                //Fin boton guardar
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    onClick = { navController.navigate("menu-inspector") },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Volver",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                //Fin boton volver
-
                 Spacer(modifier = Modifier.height(32.dp))
             }
         }
-
     }
 }
