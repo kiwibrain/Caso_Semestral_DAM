@@ -3,7 +3,6 @@ package com.duoc.prerenderrack.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,8 +13,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.duoc.prerenderrack.model.CargoUsuario
 
 @Composable
 fun PantallaLogin(navController: NavController){
@@ -118,7 +114,16 @@ fun PantallaLogin(navController: NavController){
 
         Button(
             onClick = {
-                navController.navigate("menu-inspector")},
+            if (correo == "inspector@duoc.cl" && contrasena == "1234"){
+                navController.navigate("menu-inspector")
+            }else if (correo == "supervisor@duoc.cl" && contrasena == "4321"){
+                navController.navigate("menu-supervisor")
+            }else{
+                println("credenciales incorrectas")
+                //ingresar modal aqui
+            }
+            //insertar animacion de carga con delay
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
             modifier = Modifier.fillMaxWidth().height(50.dp)
         ) {
