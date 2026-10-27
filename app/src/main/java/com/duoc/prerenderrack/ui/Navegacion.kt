@@ -14,6 +14,7 @@ fun Navegacion(){
         composable("pantalla_login") { PantallaLogin(navController)}
         composable("menu-inspector") {MenuInspector(navController)}
         composable("nuevo_registro") {VistaNuevoRegistro(navController)}
+        composable("nuevo_usuario") {VistaCreacionUsuario(navController)}
         composable("menu-supervisor"){MenuSupervisor(navController)}
         //agregar mas pantallas mas tarde
     }
