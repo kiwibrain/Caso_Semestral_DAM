@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 @Composable
 fun PantallaLogin(navController: NavController){
 
+    var modalError by remember { mutableStateOf(false) }
     var correo by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
 
@@ -120,7 +121,7 @@ fun PantallaLogin(navController: NavController){
                 navController.navigate("menu-supervisor")
             }else{
                 println("credenciales incorrectas")
-                //ingresar modal aqui
+                modalError = true
             }
             //insertar animacion de carga con delay
             },
@@ -146,4 +147,14 @@ fun PantallaLogin(navController: NavController){
 
     }//Fin Column
 
+    //modal inicio sesión
+    if (modalError){
+        ModalAlerta(
+            titulo = "Error",
+            mensaje = "Credenciales incorrectas",
+            onDismiss = {modalError = false}
+        )
+    }//fin if modalError
+
 }//Fin PantallaLogin
+

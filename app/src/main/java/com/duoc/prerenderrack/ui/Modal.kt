@@ -17,7 +17,7 @@ fun ModalAlerta(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(text = titulo, fontWeight = FontWeight.Bold, color = Color(0xFF1E2749))
+            Text(text = titulo, fontWeight = FontWeight.Bold)
         },
         text = {
             Text(text = mensaje)
