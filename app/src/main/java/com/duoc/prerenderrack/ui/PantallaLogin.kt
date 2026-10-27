@@ -26,9 +26,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 
 @Composable
 fun PantallaLogin(navController: NavController){
+
 
     var modalError by remember { mutableStateOf(false) }
     var correo by remember { mutableStateOf("") }
@@ -103,8 +105,10 @@ fun PantallaLogin(navController: NavController){
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
                     cursorColor = Color.Black
-                )//fin colors
+                ),//fin colors
 
+                //transform para contraseña censurada
+                visualTransformation = PasswordVisualTransformation()
             )//Fin text field contraseña
 
 
