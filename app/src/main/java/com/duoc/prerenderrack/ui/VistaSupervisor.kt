@@ -96,7 +96,7 @@ fun MenuSupervisor(navController: NavController, nombreSupervisor: String = "nom
         ) {
             Button(
                 onClick = {
-                    navController.navigate("pantalla_crear_usuario")
+                    navController.navigate("nuevo_usuario")
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
                 shape = RoundedCornerShape(24.dp),
