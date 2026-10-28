@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -140,30 +142,33 @@ fun MenuSupervisor(navController: NavController, nombreSupervisor: String = "Tul
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botón Volver
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
+            //Boton cerrar sesion
+            Button(
+                onClick = {
+                    // BORRAR SESIÓN AL SALIR
+                    sharedPreferences.edit().clear().apply()
+                    navController.navigate("pantalla_login") {
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
+
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB71C1C))
             ) {
-                Button(
-                    onClick = {
-                        // BORRAR SESIÓN AL SALIR
-                        sharedPreferences.edit().clear().apply()
-                        navController.navigate("pantalla_login") {
-                            popUpTo(0) { inclusive = true }
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
-                ) {
-                    Text(
-                        text = "Volver",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }//fin texto boton volver
-            }//fin boton volver
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ExitToApp,
+                    contentDescription = "Cerrar sesión",
+                    tint = Color.White
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Cerrar Sesión",
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            } // Fin botón cerrar sesión
+
+
             Spacer(modifier = Modifier.height(18.dp))
 
             //divisor de seccion
