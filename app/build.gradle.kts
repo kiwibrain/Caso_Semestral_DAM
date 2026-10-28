@@ -60,4 +60,5 @@ dependencies {
 
     // Procesador de anotaciones (KAPT)
     annotationProcessor("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.compose.material:material-icons-extended:1.6.8")
 }

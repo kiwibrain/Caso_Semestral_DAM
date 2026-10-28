@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -23,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.duoc.prerenderrack.R
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 
 @Composable
 fun MenuInspector(navController: NavController){
@@ -122,6 +125,7 @@ fun MenuInspector(navController: NavController){
             }//fin box Boton ingresar registro
             Spacer(modifier = Modifier.height(10.dp))
 
+            //Boton cerrar sesion
             Button(
                 onClick = {
                     // BORRAR SESIÓN AL SALIR
@@ -130,16 +134,22 @@ fun MenuInspector(navController: NavController){
                         popUpTo(0) { inclusive = true }
                     }
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
+
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB71C1C))
             ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ExitToApp,
+                    contentDescription = "Cerrar sesión",
+                    tint = Color.White
+                )
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Volver",
+                    text = "Cerrar Sesión",
                     color = Color.White,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
-            }//Fin boton volver
-            Spacer(modifier = Modifier.height(18.dp))
+            } // Fin botón cerrar sesión
 
             //divisor de seccion
             HorizontalDivider(
