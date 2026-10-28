@@ -65,7 +65,7 @@ fun PantallaInicial(navController: NavController){
             Image(
                 painter = painterResource(id = R.drawable.cmc360_logo),
                 contentDescription = "Logo cmc360",
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(horizontal = 15.dp),
                 contentScale = ContentScale.Fit
             )
         }
@@ -73,7 +73,7 @@ fun PantallaInicial(navController: NavController){
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 60.dp),
+                .padding(bottom = 100.dp),
             contentAlignment = Alignment.Center
         ) {
             Button(
@@ -82,7 +82,7 @@ fun PantallaInicial(navController: NavController){
                 shape = RoundedCornerShape(24.dp),
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
-                    .height(50.dp)
+                    .height(55.dp)
             ) {
                 Text(
                     text = "Iniciar Sesión",
