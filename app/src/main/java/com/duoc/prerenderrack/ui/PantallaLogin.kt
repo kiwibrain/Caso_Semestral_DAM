@@ -33,16 +33,16 @@ fun PantallaLogin(navController: NavController){
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF88BBFF))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .height(120.dp)
     ) {
         //Box encabezado
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp)
-                .background(Color(0xFF3B59C8)),
-            contentAlignment = Alignment.Center
+                .height(120.dp)
+                .background(Color(0xFF3B59C8))
+                .padding(start = 16.dp, top = 35.dp, end = 16.dp),
+            contentAlignment = Alignment.CenterStart
         ) {
             Text(
                 text = "Iniciar Sesión",
@@ -60,14 +60,15 @@ fun PantallaLogin(navController: NavController){
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 6.dp)
+                modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
             )
             OutlinedTextField(
                 value = correo,
                 onValueChange = { correo = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp),
+                    .height(55.dp)
+                    .padding(start = 10.dp, end = 10.dp),
                 shape = RoundedCornerShape(25.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -84,14 +85,15 @@ fun PantallaLogin(navController: NavController){
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 6.dp)
+                modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
             )
             OutlinedTextField(
                 value = contrasena,
                 onValueChange = { contrasena = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(54.dp),
+                    .height(54.dp)
+                    .padding(start = 10.dp, end = 10.dp),
                 shape = RoundedCornerShape(25.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -127,16 +129,18 @@ fun PantallaLogin(navController: NavController){
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
-            modifier = Modifier.fillMaxWidth().height(50.dp)
+            modifier = Modifier.width(300.dp).height(50.dp).padding(horizontal = 20.dp).align(Alignment.CenterHorizontally)
+
         ) {
-            Text("Ingresar", color = Color.White, fontSize = 18.sp)
+            Text("Ingresar", color = Color.White, fontSize = 20.sp)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = { navController.navigate("pantalla_inicial") },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
+            modifier = Modifier.height(50.dp).padding(horizontal = 20.dp).align(Alignment.CenterHorizontally)
         ) {
             Text(
                 text = "Volver",

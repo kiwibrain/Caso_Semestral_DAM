@@ -49,17 +49,17 @@ fun VistaCreacionUsuario(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF88BBFF))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .height(100.dp)
     ) {
         // 1. Box encabezado
         item {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(100.dp)
-                    .background(Color(0xFF3B59C8)),
-                contentAlignment = Alignment.Center
+                    .height(120.dp)
+                    .background(Color(0xFF3B59C8))
+                    .padding(start = 16.dp, top = 35.dp, end = 16.dp),
+                contentAlignment = Alignment.CenterStart
             ) {
                 Text(
                     text = "Nuevo Usuario",
@@ -79,14 +79,15 @@ fun VistaCreacionUsuario(navController: NavController) {
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 6.dp)
+                modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
             )
             OutlinedTextField(
                 value = nombreCompleto,
                 onValueChange = { nombreCompleto = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp),
+                    .height(55.dp)
+                    .padding(start = 10.dp, end = 10.dp),
                 shape = RoundedCornerShape(25.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -107,14 +108,15 @@ fun VistaCreacionUsuario(navController: NavController) {
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 6.dp)
+                modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
             )
             OutlinedTextField(
                 value = rut,
                 onValueChange = {rut = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp),
+                    .height(55.dp)
+                    .padding(start = 10.dp, end = 10.dp),
                 shape = RoundedCornerShape(25.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -135,14 +137,15 @@ fun VistaCreacionUsuario(navController: NavController) {
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 6.dp)
+                modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
             )
             OutlinedTextField(
                 value = fechaNacimiento,
                 onValueChange = { fechaNacimiento = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp),
+                    .height(55.dp)
+                    .padding(start = 10.dp, end = 10.dp),
                 shape = RoundedCornerShape(25.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -163,14 +166,15 @@ fun VistaCreacionUsuario(navController: NavController) {
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 6.dp)
+                modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
             )
             OutlinedTextField(
                 value = telefono,
                 onValueChange = { telefono = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp),
+                    .height(55.dp)
+                    .padding(start = 10.dp, end = 10.dp),
                 shape = RoundedCornerShape(25.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -190,14 +194,15 @@ fun VistaCreacionUsuario(navController: NavController) {
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 6.dp)
+                modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
             )
             OutlinedTextField(
                 value = correo,
                 onValueChange = { correo = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp),
+                    .height(55.dp)
+                    .padding(start = 10.dp, end = 10.dp),
                 shape = RoundedCornerShape(25.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -217,14 +222,15 @@ fun VistaCreacionUsuario(navController: NavController) {
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 6.dp)
+                modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
             )
             OutlinedTextField(
                 value = contrasena,
                 onValueChange = { contrasena = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp),
+                    .height(55.dp)
+                    .padding(start = 10.dp, end = 10.dp),
                 shape = RoundedCornerShape(25.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -290,7 +296,7 @@ fun VistaCreacionUsuario(navController: NavController) {
                 }
                 //Fin boton volver
             }
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(50.dp))
         }
     }
 }

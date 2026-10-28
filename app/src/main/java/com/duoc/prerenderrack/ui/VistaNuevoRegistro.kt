@@ -79,17 +79,18 @@ fun VistaNuevoRegistro(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF88BBFF))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .height(100.dp)
+
     ) {
         // 1. Box encabezado
         item {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(100.dp)
-                    .background(Color(0xFF3B59C8)),
-                contentAlignment = Alignment.Center
+                    .height(120.dp)
+                    .background(Color(0xFF3B59C8))
+                    .padding(start = 20.dp, top = 35.dp, end = 16.dp),
+                contentAlignment = Alignment.CenterStart
             ) {
                 Text(
                     text = "Nuevo Registro",
@@ -102,229 +103,235 @@ fun VistaNuevoRegistro(navController: NavController) {
         }
         //Fin encabezado
 
-        // 2. Modelo
-        item {
-            Text(
-                text = "Modelo:",
-                color = Color(0xFF1E2749),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 6.dp)
-            )
-            OutlinedTextField(
-                value = modelo,
-                onValueChange = { modelo = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-                shape = RoundedCornerShape(25.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-        }
-        //Fin text field Modelo
 
-        // 3. Fecha/hora
-        item {
-            Text(
-                text = "Fecha/Hora:",
-                color = Color(0xFF1E2749),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 6.dp)
-            )
-            OutlinedTextField(
-                value = fecha_hora,
-                onValueChange = { fecha_hora = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-                shape = RoundedCornerShape(25.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-        }
-        //Fin text field fecha/hora
+            // 2. Modelo
+                item {
+                    Text(
+                        text = "Modelo:",
+                        color = Color(0xFF1E2749),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
+                    )
+                    OutlinedTextField(
+                        value = modelo,
+                        onValueChange = { modelo = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(55.dp)
+                            .padding(start = 10.dp, end = 10.dp),
+                        shape = RoundedCornerShape(25.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            cursorColor = Color.Black
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+                //Fin text field Modelo
 
-        // 4. Responsable
-        item {
-            Text(
-                text = "Responsable:",
-                color = Color(0xFF1E2749),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 6.dp)
-            )
-            OutlinedTextField(
-                value = responsable,
-                onValueChange = { responsable = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-                shape = RoundedCornerShape(25.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-        }
-        //Fin text field  responsable
+                // 3. Fecha/hora
+                item {
+                    Text(
+                        text = "Fecha/Hora:",
+                        color = Color(0xFF1E2749),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
+                    )
+                    OutlinedTextField(
+                        value = fecha_hora,
+                        onValueChange = { fecha_hora = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(55.dp)
+                            .padding(start = 10.dp, end = 10.dp),
+                        shape = RoundedCornerShape(25.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            cursorColor = Color.Black
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+                //Fin text field fecha/hora
 
-        // 5. Estado Actual
-        item {
-            Text(
-                text = "Estado Actual:",
-                color = Color(0xFF1E2749),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 6.dp)
-            )
-            OutlinedTextField(
-                value = estadoActual,
-                onValueChange = { estadoActual = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-                shape = RoundedCornerShape(25.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-        } //Fin text field Estado Actual
+                // 4. Responsable
+                item {
+                    Text(
+                        text = "Responsable:",
+                        color = Color(0xFF1E2749),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
+                    )
+                    OutlinedTextField(
+                        value = responsable,
+                        onValueChange = { responsable = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(55.dp)
+                            .padding(start = 10.dp, end = 10.dp),
+                        shape = RoundedCornerShape(25.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            cursorColor = Color.Black
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+                //Fin text field  responsable
 
-        // 6. Descripcion
-        item {
-            Text(
-                text = "Descripcion:",
-                color = Color(0xFF1E2749),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 6.dp)
-            )
-            OutlinedTextField(
-                value = descipcion,
-                onValueChange = { descipcion = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-                shape = RoundedCornerShape(25.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-        } // Fin text field descripcion
+                // 5. Estado Actual
+                item {
+                    Text(
+                        text = "Estado Actual:",
+                        color = Color(0xFF1E2749),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
+                    )
+                    OutlinedTextField(
+                        value = estadoActual,
+                        onValueChange = { estadoActual = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(55.dp)
+                            .padding(start = 10.dp, end = 10.dp),
+                        shape = RoundedCornerShape(25.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            cursorColor = Color.Black
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                } //Fin text field Estado Actual
 
-        // 7. Foto del Rack y Botones
-        item {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Fotografia del Rack:",
-                    color = Color(0xFF1E2749),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .padding(bottom = 6.dp)
-                )
-
-                if (bitmap != null) {
-                    Image(
-                        bitmap = bitmap!!.asImageBitmap(),
-                        contentDescription = "Foto del Rack",
-                        modifier = Modifier.size(200.dp)
+                // 6. Descripcion
+                item {
+                    Text(
+                        text = "Descripcion:",
+                        color = Color(0xFF1E2749),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
+                    )
+                    OutlinedTextField(
+                        value = descipcion,
+                        onValueChange = { descipcion = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp)
+                            .padding(start = 10.dp, end = 10.dp),
+                        shape = RoundedCornerShape(25.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            cursorColor = Color.Black
+                        )
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                }
+                } // Fin text field descripcion
 
-                Button(onClick = {
-                    cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
-                }) {
-                    Text("Tomar foto del Rack")
-                }
+                // 7. Foto del Rack y Botones
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Fotografia del Rack:",
+                            color = Color(0xFF1E2749),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .align(Alignment.Start)
+                                .padding(start = 10.dp,bottom = 6.dp)
+                        )
 
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    estadoRevision.forEachIndexed { index, opcion ->
-                        Row(verticalAlignment = Alignment.CenterVertically){
-                            RadioButton(
-                                selected = estadoSeleccionado == index,
-                                onClick = {estadoSeleccionado = index}
+                        if (bitmap != null) {
+                            Image(
+                                bitmap = bitmap!!.asImageBitmap(),
+                                contentDescription = "Foto del Rack",
+                                modifier = Modifier.size(200.dp)
                             )
-                            Text(opcion)
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
+
+                        Button(onClick = {
+                            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                        }) {
+                            Text("Tomar foto del Rack")
+                        }
+
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            estadoRevision.forEachIndexed { index, opcion ->
+                                Row(verticalAlignment = Alignment.CenterVertically){
+                                    RadioButton(
+                                        selected = estadoSeleccionado == index,
+                                        onClick = {estadoSeleccionado = index}
+                                    )
+                                    Text(opcion)
+                                }
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Button(
+                                onClick = { navController.popBackStack() },
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
+                            ) {
+                                Text(
+                                    text = "Guardar",
+                                    color = Color.White,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                            //Fin boton guardar
+
+                            Spacer(modifier = Modifier.width(16.dp))
+
+                            Button(
+                                onClick = { navController.popBackStack() },
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
+                            ) {
+                                Text(
+                                    text = "Volver",
+                                    color = Color.White,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                            //Fin boton volver
+                        }
+                        Spacer(modifier = Modifier.height(50.dp))
                     }
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Button(
-                        onClick = { navController.popBackStack() },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
-                    ) {
-                        Text(
-                            text = "Guardar",
-                            color = Color.White,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    //Fin boton guardar
-
-                    Spacer(modifier = Modifier.width(16.dp))
-
-                    Button(
-                        onClick = { navController.popBackStack() },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
-                    ) {
-                        Text(
-                            text = "Volver",
-                            color = Color.White,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    //Fin boton volver
-                }
-                Spacer(modifier = Modifier.height(32.dp))
-            }
-        }
-    }
+    }//fin lazycolumn
 }
