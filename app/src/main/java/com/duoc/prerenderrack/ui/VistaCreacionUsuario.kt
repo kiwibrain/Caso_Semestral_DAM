@@ -1,24 +1,10 @@
 package com.duoc.prerenderrack.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 
 @Composable
 fun VistaCreacionUsuario(navController: NavController) {
@@ -44,6 +31,8 @@ fun VistaCreacionUsuario(navController: NavController) {
         "Inspector",
         "Especialista Tecnico")
     var cargoSeleccionado by remember {mutableStateOf(0)}
+    var modalError by remember { mutableStateOf(false) }
+    var mensajeModal by remember { mutableStateOf("") }
 
     LazyColumn(
         modifier = Modifier
@@ -238,7 +227,8 @@ fun VistaCreacionUsuario(navController: NavController) {
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
                     cursorColor = Color.Black
-                )
+                ),
+                visualTransformation = PasswordVisualTransformation()
             )
             Spacer(modifier = Modifier.height(16.dp))
         } // Fin text field Contraseña
@@ -269,7 +259,19 @@ fun VistaCreacionUsuario(navController: NavController) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(
-                    onClick = { navController.popBackStack() },
+                    onClick = {
+                        if (nombreCompleto.isBlank()
+                            || rut.isBlank()
+                            || fechaNacimiento.isBlank()
+                            || telefono.isBlank()
+                            || correo.isBlank()
+                            || contrasena.isBlank()
+                            ) {
+                            modalError = true
+                        }else{
+                            navController.popBackStack()
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
                 ) {
                     Text(
@@ -298,5 +300,12 @@ fun VistaCreacionUsuario(navController: NavController) {
             }
             Spacer(modifier = Modifier.height(50.dp))
         }
+    }
+    if (modalError){
+        ModalAlerta(
+            titulo = "Error",
+            mensaje = "No pueden haber casillas vacias.",
+            onDismiss = { modalError = false }
+        )
     }
 }

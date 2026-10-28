@@ -60,6 +60,7 @@ fun PantallaLogin(navController: NavController){
         Spacer(modifier = Modifier.height(12.dp))
         //Formulario
         Column{
+            //CORREO
             Text("Correo:",
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
@@ -85,6 +86,7 @@ fun PantallaLogin(navController: NavController){
 
             Spacer(modifier = Modifier.height(14.dp))
 
+            //CONTRASEÑA
             Text("Contraseña:",
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
