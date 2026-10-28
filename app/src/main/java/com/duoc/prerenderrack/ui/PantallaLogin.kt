@@ -43,6 +43,8 @@ fun PantallaLogin(navController: NavController){
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF88BBFF))
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         //Box encabezado
         Box(
@@ -58,10 +60,12 @@ fun PantallaLogin(navController: NavController){
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
+
         }
 
+        Spacer(modifier = Modifier.height(12.dp))
         //Formulario
-        Column {
+        Column{
             Text("Correo:",
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
@@ -73,7 +77,7 @@ fun PantallaLogin(navController: NavController){
                 onValueChange = { correo = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(54.dp),
+                    .height(55.dp),
                 shape = RoundedCornerShape(25.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -135,7 +139,7 @@ fun PantallaLogin(navController: NavController){
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
             modifier = Modifier.fillMaxWidth().height(50.dp)
         ) {
-            Text("Ingresar", color = Color.White)
+            Text("Ingresar", color = Color.White, fontSize = 18.sp)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
