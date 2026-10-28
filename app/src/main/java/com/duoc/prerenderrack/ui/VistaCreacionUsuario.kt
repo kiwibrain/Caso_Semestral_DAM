@@ -260,16 +260,27 @@ fun VistaCreacionUsuario(navController: NavController) {
             ) {
                 Button(
                     onClick = {
-                        if (nombreCompleto.isBlank()
-                            || rut.isBlank()
-                            || fechaNacimiento.isBlank()
-                            || telefono.isBlank()
-                            || correo.isBlank()
-                            || contrasena.isBlank()
-                            ) {
-                            modalError = true
-                        }else{
-                            navController.popBackStack()
+                        when{
+                            nombreCompleto.isBlank() -> {
+                                mensajeModal = "El nombre no debe estar vacio."
+                                modalError = true }
+                            rut.isBlank() -> {
+                                mensajeModal = "El rut no debe estar vacio."
+                                modalError = true }
+                            fechaNacimiento.isBlank() -> {
+                                mensajeModal = "La fecha de nacimiento no debe estar vacia."
+                                modalError = true }
+                            telefono.isBlank() -> {
+                                mensajeModal = "El telefono no debe estar vacio."
+                                modalError = true }
+                            correo.isBlank() -> {
+                                mensajeModal = "El correo no debe estar vacio."
+                                modalError = true }
+                            contrasena.isBlank() -> {
+                                mensajeModal = "La contraseña no debe estar vacia."
+                                modalError = true }
+                            else -> {
+                                navController.popBackStack() }
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
@@ -304,7 +315,7 @@ fun VistaCreacionUsuario(navController: NavController) {
     if (modalError){
         ModalAlerta(
             titulo = "Error",
-            mensaje = "No pueden haber casillas vacias.",
+            mensaje = mensajeModal,
             onDismiss = { modalError = false }
         )
     }
