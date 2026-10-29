@@ -11,12 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,12 +35,14 @@ fun VistaNuevoRegistro(navController: NavController) {
     var fecha_hora by remember { mutableStateOf("") }
     var responsable by remember { mutableStateOf("") }
     var estadoActual by remember { mutableStateOf("") }
-    var descipcion by remember { mutableStateOf("") }
+    var descripcion by remember { mutableStateOf("") }
     val estadoRevision = listOf(
         "Pendiente",
         "En Revision",
         "Finalizado")
     var estadoSeleccionado by remember {mutableStateOf(0)}
+    var modalError by remember { mutableStateOf(false) }
+    var mensajeModal by remember { mutableStateOf("") }
 
     // Lanzador de cámara
     val takePictureLauncher = rememberLauncherForActivityResult(
@@ -229,8 +226,8 @@ fun VistaNuevoRegistro(navController: NavController) {
                         modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
                     )
                     OutlinedTextField(
-                        value = descipcion,
-                        onValueChange = { descipcion = it },
+                        value = descripcion,
+                        onValueChange = { descripcion = it },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(100.dp)
@@ -303,7 +300,27 @@ fun VistaNuevoRegistro(navController: NavController) {
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Button(
-                                onClick = { navController.popBackStack() },
+                                onClick = {
+                                    when{
+                                        modelo.isBlank() -> {
+                                            mensajeModal = "Modelo de rack no debe estar vacio."
+                                            modalError = true }
+                                        fecha_hora.isBlank() -> {
+                                            mensajeModal = "Fecha de registro no debe estar vacia."
+                                            modalError = true }
+                                        responsable.isBlank() -> {
+                                            mensajeModal = "Nombre del responsable no debe estar vacio."
+                                            modalError = true }
+                                        estadoActual.isBlank() -> {
+                                            mensajeModal = "Estado no debe estar vacio."
+                                            modalError = true }
+                                        descripcion.isBlank() -> {
+                                            mensajeModal = "Descripción no debe estar vacio."
+                                            modalError = true }
+                                        else -> {
+                                            navController.popBackStack() }
+                                    }
+                                },
                                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
                             ) {
                                 Text(
@@ -333,5 +350,17 @@ fun VistaNuevoRegistro(navController: NavController) {
                         Spacer(modifier = Modifier.height(50.dp))
                     }
                 }
+
+
+
     }//fin lazycolumn
+
+    //MODAL
+    if (modalError){
+        ModalAlerta(
+            titulo = "Error",
+            mensaje = mensajeModal,
+            onDismiss = { modalError = false }
+        )
+    }
 }
