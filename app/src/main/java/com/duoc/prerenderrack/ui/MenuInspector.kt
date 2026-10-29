@@ -1,45 +1,40 @@
 package com.duoc.prerenderrack.ui
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.duoc.prerenderrack.R
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
+import com.duoc.prerenderrack.viewmodel.InspectorViewModel
 
 @Composable
-fun MenuInspector(navController: NavController){
-    val context = LocalContext.current
-    val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+fun MenuInspector(
+    navController: NavController,
+    inspectorViewModel: InspectorViewModel // <-- Inyectamos el ViewModel
+) {
+    val usuario = inspectorViewModel.usuarioActual
+    val listaRacks = inspectorViewModel.listaRacks
 
-    //columna encabezado
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF88BBFF))
-            .height(100.dp)
     ) {
-        //box encabezado
+        // Box Encabezado
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -48,10 +43,7 @@ fun MenuInspector(navController: NavController){
                 .padding(start = 16.dp, top = 35.dp, end = 16.dp),
             contentAlignment = Alignment.CenterStart
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                //imagen usuario
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(id = R.drawable.juanin),
                     contentDescription = "icono inspector",
@@ -59,27 +51,27 @@ fun MenuInspector(navController: NavController){
                 )
                 Spacer(modifier = Modifier.width(10.dp))
 
-                //nombre usuario y cargo
-                Column{
+                // Nombre y cargo dinámicos desde el ViewModel
+                Column {
                     Text(
-                        text = "Juanin Juan Harry",
+                        text = usuario?.nombre ?: "Cargando...",
                         color = Color.White,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = "Inspector",
+                        text = usuario?.cargo ?: "Inspector",
                         color = Color.LightGray,
                         fontSize = 15.sp
                     )
                 }
             }
-        }//Fin box encabezado
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        //columna elementos de vista
+        // Contenido Principal
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -87,27 +79,24 @@ fun MenuInspector(navController: NavController){
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row() {
-                Text(
-                    text = "Sistema de Registro Racks",
-                    color = Color.Black,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+            Text(
+                text = "Sistema de Registro Racks",
+                color = Color.Black,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+            )
+
             Spacer(modifier = Modifier.height(12.dp))
 
-            //Box boton ingresar registro
+            // Botón Nuevo Registro
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 30.dp),
+                    .padding(bottom = 20.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Button(
-                    onClick = {
-                        navController.navigate("nuevo_registro")
-                    },
+                    onClick = { navController.navigate("nuevo_registro") },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
                     shape = RoundedCornerShape(24.dp),
                     modifier = Modifier
@@ -121,20 +110,17 @@ fun MenuInspector(navController: NavController){
                         fontWeight = FontWeight.Bold
                     )
                 }
+            }
 
-            }//fin box Boton ingresar registro
-            Spacer(modifier = Modifier.height(10.dp))
-
-            //Boton cerrar sesion
+            // Botón Cerrar Sesión mediante el ViewModel
             Button(
                 onClick = {
-                    // BORRAR SESIÓN AL SALIR
-                    sharedPreferences.edit().clear().apply()
-                    navController.navigate("pantalla_login") {
-                        popUpTo(0) { inclusive = true }
+                    inspectorViewModel.cerrarSesion {
+                        navController.navigate("pantalla_login") {
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 },
-
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB71C1C))
             ) {
                 Icon(
@@ -149,19 +135,17 @@ fun MenuInspector(navController: NavController){
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
-            } // Fin botón cerrar sesión
+            }
 
-            //divisor de seccion
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp, horizontal = 24.dp),
+                    .padding(vertical = 12.dp, horizontal = 24.dp),
                 thickness = 2.dp,
                 color = Color(0xFF3B59C8)
-            )//fin divisor
-            Spacer(modifier = Modifier.height(10.dp))
+            )
 
-            //cuadro de logs
+            // Lista de Logs Dinámica
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -184,43 +168,18 @@ fun MenuInspector(navController: NavController){
                     LazyColumn(
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
-
                     ) {
-                        item {
+                        // Renderizado dinámico de la lista obtenida del ViewModel
+                        items(listaRacks) { rack ->
                             ItemLog(
-                                fecha = "25-03-2026 - 12:01 hrs",
-                                rack = "N° 420",
-                                descripcion = "Este rack esta pulento"
-                            )
-                        }
-                        item {
-                            ItemLog(
-                                fecha = "02-04-2026 - 09:35 hrs",
-                                rack = "N° 67",
-                                descripcion = "pipipipi"
-                            )
-                        }
-                        item {
-                            ItemLog(
-                                fecha = "22-05-2026 - 15:55 hrs",
-                                rack = "N° 69",
-                                descripcion = "very nice"
-                            )
-                        }
-                        item {
-                            ItemLog(
-                                fecha = "26-05-2026 - 08:23 hrs",
-                                rack = "N° 666",
-                                descripcion = "que buen expectaculo"
+                                fecha = rack.fechaHora,
+                                rack = "N° ${rack.id}",
+                                descripcion = rack.descripcion
                             )
                         }
                     }
                 }
             }
-
-
-        }//fin column contenido
-
-    }//fin column general
-
-}//fin menu inspector
+        }
+    }
+}
