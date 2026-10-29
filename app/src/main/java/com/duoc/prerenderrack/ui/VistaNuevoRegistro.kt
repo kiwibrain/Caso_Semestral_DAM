@@ -34,7 +34,6 @@ fun VistaNuevoRegistro(navController: NavController) {
     var modelo by remember { mutableStateOf("") }
     var fecha_hora by remember { mutableStateOf("") }
     var responsable by remember { mutableStateOf("") }
-    var estadoActual by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
     val estadoRevision = listOf(
         "Pendiente",
@@ -188,35 +187,7 @@ fun VistaNuevoRegistro(navController: NavController) {
                 }
                 //Fin text field  responsable
 
-                // 5. Estado Actual
-                item {
-                    Text(
-                        text = "Estado Actual:",
-                        color = Color(0xFF1E2749),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
-                    )
-                    OutlinedTextField(
-                        value = estadoActual,
-                        onValueChange = { estadoActual = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(55.dp)
-                            .padding(start = 10.dp, end = 10.dp),
-                        shape = RoundedCornerShape(25.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            cursorColor = Color.Black
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                } //Fin text field Estado Actual
-
-                // 6. Descripcion
+                // 7. Descripcion
                 item {
                     Text(
                         text = "Descripcion:",
@@ -244,13 +215,14 @@ fun VistaNuevoRegistro(navController: NavController) {
                     Spacer(modifier = Modifier.height(16.dp))
                 } // Fin text field descripcion
 
-                // 7. Foto del Rack y Botones
+                // 7. Foto del Rack y Botones estado
                 item {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+
                         Text(
                             text = "Fotografia del Rack:",
                             color = Color(0xFF1E2749),
@@ -275,12 +247,22 @@ fun VistaNuevoRegistro(navController: NavController) {
                         }) {
                             Text("Tomar foto del Rack")
                         }
+                        Spacer(modifier = Modifier.height(16.dp))
 
                         Column(
                             modifier = Modifier.fillMaxSize(),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.Start
                         ) {
+                            Text(
+                                text = "Estado Actual:",
+                                color = Color(0xFF1E2749),
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier
+                                    .align(Alignment.Start)
+                                    .padding(start = 10.dp,bottom = 6.dp)
+                            )
                             estadoRevision.forEachIndexed { index, opcion ->
                                 Row(verticalAlignment = Alignment.CenterVertically){
                                     RadioButton(
@@ -310,9 +292,6 @@ fun VistaNuevoRegistro(navController: NavController) {
                                             modalError = true }
                                         responsable.isBlank() -> {
                                             mensajeModal = "Nombre del responsable no debe estar vacio."
-                                            modalError = true }
-                                        estadoActual.isBlank() -> {
-                                            mensajeModal = "Estado no debe estar vacio."
                                             modalError = true }
                                         descripcion.isBlank() -> {
                                             mensajeModal = "Descripción no debe estar vacio."
