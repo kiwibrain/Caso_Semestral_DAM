@@ -114,7 +114,15 @@ fun PantallaLogin(navController: NavController){
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button(
+        BotonCargando(
+            texto = "Ingresar",
+            cargando = cargandoGuardar,
+            modifier = Modifier
+                .width(300.dp)
+                .height(50.dp)
+                .padding(horizontal = 20.dp)
+                .align(Alignment.CenterHorizontally),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
             onClick = {
                 if (correo == "inspector@duoc.cl" && contrasena == "1234"){
                     // GUARDAR SESIÓN LOCALMENTE
@@ -143,26 +151,8 @@ fun PantallaLogin(navController: NavController){
                 } else {
                     modalError = true
                 }
-            },
-            enabled = !cargandoGuardar,
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
-            modifier = Modifier
-                .width(300.dp).height(50.dp)
-                .padding(horizontal = 20.dp)
-                .align(Alignment.CenterHorizontally)
-
-        ) {
-            if (cargandoGuardar) {
-                androidx.compose.material3.CircularProgressIndicator(
-                    modifier = Modifier.size(24.dp),
-                    color = Color.White,
-                    strokeWidth = 2.dp,
-
-                )
-            } else {
-                Text("Ingresar", color = Color.White, fontSize = 20.sp)
             }
-        }
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
