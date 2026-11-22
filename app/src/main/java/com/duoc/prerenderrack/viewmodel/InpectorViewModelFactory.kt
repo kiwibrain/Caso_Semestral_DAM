@@ -11,7 +11,7 @@ class InspectorViewModelFactory(private val context: Context) : ViewModelProvide
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val usuarioRepo = UsuarioRepository(context)
-        val rackRepo = RackRepository(context)
+        val rackRepo = RackRepository()
         return InspectorViewModel(usuarioRepo, rackRepo) as T
     }
 }

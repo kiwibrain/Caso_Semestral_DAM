@@ -1,74 +1,19 @@
 package com.duoc.prerenderrack.repository
 
-import android.content.Context
 import com.duoc.prerenderrack.model.Rack
-import com.duoc.prerenderrack.model.Usuario
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.duoc.prerenderrack.remote.RetrofitInstance // Asegúrate de tener configurada esta clase en tu proyecto
 
-class RackRepository(context: Context) {
+class RackRepository {
 
-    private val prefs = context.getSharedPreferences("rack_prefs", Context.MODE_PRIVATE)
-    private val gson = Gson()
-
-    fun obtenerTodosLosRacks(): List<Rack> {
-        val json = prefs.getString("lista_racks", null) ?: return obtenerRacksIniciales()
-        val type = object : TypeToken<List<Rack>>() {}.type
-        val lista: List<Rack>? = gson.fromJson(json, type)
-        return if (lista.isNullOrEmpty()) obtenerRacksIniciales() else lista
+    // Función suspendida para obtener los datos desde la API/Base de datos
+    suspend fun getRacks(): List<Rack> {
+        return RetrofitInstance.api.getRacks()
     }
 
-    fun guardarRack(rack: Rack) {
-        val listaActual = obtenerTodosLosRacks().toMutableList()
-        listaActual.add(0, rack)
-        val json = gson.toJson(listaActual)
-        prefs.edit().putString("lista_racks", json).apply()
+    // Si tu API también tiene un endpoint para guardar (POST), se adaptaría de esta forma:
+    /*
+    suspend fun guardarRack(rack: Rack) {
+        RetrofitInstance.api.createRack(rack)
     }
-
-    private fun obtenerRacksIniciales(): List<Rack> {
-        val usuarioEjemplo = Usuario(
-            rut = "12345678-9",
-            nombre = "Juanin Juan Harry",
-            fechaNacimiento = "01/01/1990",
-            numeroTelefono = "912345678",
-            correo = "inspector@duoc.cl",
-            contrasena = "1234",
-            cargo = "Inspector"
-        )
-
-        return listOf(
-            Rack(
-                id = "420",
-                fecha_hora = "25-03-2026 - 12:01 hrs",
-                responsable = usuarioEjemplo,
-                estadoActual = "Operativo",
-                descripcion = "Este rack esta pulento",
-                estadoRevision = "Aprobado"
-            ),
-            Rack(
-                id = "67",
-                fecha_hora = "02-04-2026 - 09:35 hrs",
-                responsable = usuarioEjemplo,
-                estadoActual = "En Revisión",
-                descripcion = "pipipipi",
-                estadoRevision = "Pendiente"
-            ),
-            Rack(
-                id = "69",
-                fecha_hora = "22-05-2026 - 15:55 hrs",
-                responsable = usuarioEjemplo,
-                estadoActual = "Operativo",
-                descripcion = "very nice",
-                estadoRevision = "Aprobado"
-            ),
-            Rack(
-                id = "666",
-                fecha_hora = "26-05-2026 - 08:23 hrs",
-                responsable = usuarioEjemplo,
-                estadoActual = "Critico",
-                descripcion = "que buen espectaculo",
-                estadoRevision = "Rechazado"
-            )
-        )
-    }
+    */
 }

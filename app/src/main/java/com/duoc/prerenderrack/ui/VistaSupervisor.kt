@@ -5,33 +5,43 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.duoc.prerenderrack.R
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import com.duoc.prerenderrack.viewmodel.RackViewModel
 
 @Composable
-fun MenuSupervisor(navController: NavController, nombreSupervisor: String = "Tulio Triviño"){
+fun MenuSupervisor(
+    navController: NavController,
+    nombreSupervisor: String = "Tulio Triviño",
+    viewModel: RackViewModel = viewModel()
+){
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+
+    // Obtenemos los datos dinámicos desde la base de datos
+    val racks by viewModel.racks.collectAsState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF88BBFF))
-            .height(100.dp)
     ) {
         // Box encabezado
         Box(
@@ -142,7 +152,7 @@ fun MenuSupervisor(navController: NavController, nombreSupervisor: String = "Tul
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            //Boton cerrar sesion
+            // Botón cerrar sesión
             Button(
                 onClick = {
                     // BORRAR SESIÓN AL SALIR
@@ -151,7 +161,6 @@ fun MenuSupervisor(navController: NavController, nombreSupervisor: String = "Tul
                         popUpTo(0) { inclusive = true }
                     }
                 },
-
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB71C1C))
             ) {
                 Icon(
@@ -166,22 +175,22 @@ fun MenuSupervisor(navController: NavController, nombreSupervisor: String = "Tul
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
-            } // Fin botón cerrar sesión
-
+            }
 
             Spacer(modifier = Modifier.height(18.dp))
 
-            //divisor de seccion
+            // Divisor de sección
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp, horizontal = 24.dp),
                 thickness = 2.dp,
                 color = Color(0xFF3B59C8)
-            )//fin divisor
+            )
+
             Spacer(modifier = Modifier.height(10.dp))
 
-            //cuadro de logs
+            // Cuadro de logs iterando la base de datos
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -204,38 +213,17 @@ fun MenuSupervisor(navController: NavController, nombreSupervisor: String = "Tul
                     LazyColumn(
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
-
                     ) {
-                        item {
+                        // Iteración dinámica de la lista de racks
+                        items(racks) { rack ->
                             ItemLog(
-                                fecha = "25-03-2026 - 12:01 hrs",
-                                rack = "N° 420",
-                                descripcion = "Este rack esta pulento"
-                            )
-                        }
-                        item {
-                            ItemLog(
-                                fecha = "02-04-2026 - 09:35 hrs",
-                                rack = "N° 67",
-                                descripcion = "pipipipi"
-                            )
-                        }
-                        item {
-                            ItemLog(
-                                fecha = "22-05-2026 - 15:55 hrs",
-                                rack = "N° 69",
-                                descripcion = "very nice"
-                            )
-                        }
-                        item {
-                            ItemLog(
-                                fecha = "26-05-2026 - 08:23 hrs",
-                                rack = "N° 666",
-                                descripcion = "que buen expectaculo"
+                                fecha = rack.fecha_hora,
+                                rack = "N° ${rack.id}",
+                                descripcion = rack.descripcion
                             )
                         }
 
-                        //boton VER MÁS
+                        // Botón VER MÁS
                         item {
                             Spacer(modifier = Modifier.height(8.dp))
                             Button(
@@ -246,9 +234,9 @@ fun MenuSupervisor(navController: NavController, nombreSupervisor: String = "Tul
                                 Text("Ver más", color = Color.White, fontWeight = FontWeight.Bold)
                             }
                         }
-                    } // Fin LazyColumn
+                    }
                 }
             }
-        }//fin column contenido
-    }//fin column general
+        }
+    }
 }

@@ -13,7 +13,7 @@ import com.duoc.prerenderrack.viewmodel.InspectorViewModel
 class MainActivity : ComponentActivity() {
 
     private val usuarioRepository by lazy { UsuarioRepository(applicationContext) }
-    private val rackRepository by lazy { RackRepository(applicationContext) }
+    private val rackRepository by lazy { RackRepository() }
 
     private val inspectorViewModel by lazy {
         InspectorViewModel(usuarioRepository, rackRepository)

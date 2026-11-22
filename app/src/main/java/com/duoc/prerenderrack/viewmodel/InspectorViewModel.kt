@@ -4,10 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.duoc.prerenderrack.model.Rack
 import com.duoc.prerenderrack.model.Usuario
 import com.duoc.prerenderrack.repository.RackRepository
 import com.duoc.prerenderrack.repository.UsuarioRepository
+import kotlinx.coroutines.launch // Importación necesaria para las corrutinas
 
 class InspectorViewModel(
     private val usuarioRepository: UsuarioRepository,
@@ -27,9 +29,18 @@ class InspectorViewModel(
     }
 
     fun cargarDatos() {
-        // Cargar usuario activo y la lista de registros desde los repositorios
+        // Cargar usuario activo de forma normal (local)
         usuarioActual = usuarioRepository.obtenerUsuarioLogueado()
-        listaRacks = rackRepository.obtenerTodosLosRacks()
+
+        // Cargar la lista de racks desde internet (asíncrono)
+        viewModelScope.launch {
+            try {
+                listaRacks = rackRepository.getRacks()
+            } catch (e: Exception) {
+                // Si hay un error de conexión, evitamos que la app se caiga
+                e.printStackTrace()
+            }
+        }
     }
 
     fun cerrarSesion(onSesionCerrada: () -> Unit) {

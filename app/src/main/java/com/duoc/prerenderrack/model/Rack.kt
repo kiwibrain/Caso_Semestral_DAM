@@ -3,7 +3,7 @@ package com.duoc.prerenderrack.model
 class Rack(
     val id: String,
     var fecha_hora: String, // Cambiado de LocalDateTime a String
-    var responsable: Usuario,
+    var responsable: String,
     var estadoActual: String,
     var descripcion: String,
     val fotoUri: String? = null, // Cambiado de Uri a String para compatibilidad con Gson
