@@ -62,4 +62,12 @@ dependencies {
     // Procesador de anotaciones (KAPT)
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     implementation("androidx.compose.material:material-icons-extended:1.6.8")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Lifecycle ViewModel + LiveData (si usas LiveData en lugar de StateFlow)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
 }

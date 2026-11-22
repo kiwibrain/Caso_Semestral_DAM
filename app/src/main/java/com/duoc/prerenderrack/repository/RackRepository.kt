@@ -41,7 +41,7 @@ class RackRepository(context: Context) {
                 id = "420",
                 fechaHora = "25-03-2026 - 12:01 hrs",
                 responsable = usuarioEjemplo,
-                estadoAtual = "Operativo",
+                estadoActual = "Operativo",
                 descripcion = "Este rack esta pulento",
                 estadoRevision = "Aprobado"
             ),
@@ -49,7 +49,7 @@ class RackRepository(context: Context) {
                 id = "67",
                 fechaHora = "02-04-2026 - 09:35 hrs",
                 responsable = usuarioEjemplo,
-                estadoAtual = "En Revisión",
+                estadoActual = "En Revisión",
                 descripcion = "pipipipi",
                 estadoRevision = "Pendiente"
             ),
@@ -57,7 +57,7 @@ class RackRepository(context: Context) {
                 id = "69",
                 fechaHora = "22-05-2026 - 15:55 hrs",
                 responsable = usuarioEjemplo,
-                estadoAtual = "Operativo",
+                estadoActual = "Operativo",
                 descripcion = "very nice",
                 estadoRevision = "Aprobado"
             ),
@@ -65,7 +65,7 @@ class RackRepository(context: Context) {
                 id = "666",
                 fechaHora = "26-05-2026 - 08:23 hrs",
                 responsable = usuarioEjemplo,
-                estadoAtual = "Critico",
+                estadoActual = "Critico",
                 descripcion = "que buen espectaculo",
                 estadoRevision = "Rechazado"
             )
