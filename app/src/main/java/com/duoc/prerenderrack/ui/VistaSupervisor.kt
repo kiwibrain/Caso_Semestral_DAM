@@ -234,11 +234,21 @@ fun MenuSupervisor(navController: NavController, nombreSupervisor: String = "Tul
                                 descripcion = "que buen expectaculo"
                             )
                         }
-                    }
+
+                        //boton VER MÁS
+                        item {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Button(
+                                onClick = { navController.navigate("menu-racks") },
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B59C8)),
+                                modifier = Modifier.padding(top = 8.dp)
+                            ) {
+                                Text("Ver más", color = Color.White, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    } // Fin LazyColumn
                 }
             }
-
-
         }//fin column contenido
     }//fin column general
 }

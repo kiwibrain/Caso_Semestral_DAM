@@ -36,5 +36,9 @@ fun Navegacion() {
         composable("menu-supervisor") {
             MenuSupervisor(navController)
         }
+        composable ("menu-racks"){
+            MenuRacks(navController)
+        }
+
     }
 }

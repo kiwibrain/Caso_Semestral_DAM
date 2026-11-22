@@ -173,7 +173,7 @@ fun PantallaLogin(navController: NavController){
     if (modalError){
         ModalAlerta(
             titulo = "Error",
-            mensaje = "Credenciales incorrectas",
+            mensaje = "Credenciales no valida",
             onDismiss = { modalError = false }
         )
     }
