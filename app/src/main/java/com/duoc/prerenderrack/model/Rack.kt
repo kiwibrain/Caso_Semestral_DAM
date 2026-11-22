@@ -2,7 +2,7 @@ package com.duoc.prerenderrack.model
 
 class Rack(
     val id: String,
-    var fechaHora: String, // Cambiado de LocalDateTime a String
+    var fecha_hora: String, // Cambiado de LocalDateTime a String
     var responsable: Usuario,
     var estadoActual: String,
     var descripcion: String,

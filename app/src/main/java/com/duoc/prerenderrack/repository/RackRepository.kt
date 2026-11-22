@@ -39,7 +39,7 @@ class RackRepository(context: Context) {
         return listOf(
             Rack(
                 id = "420",
-                fechaHora = "25-03-2026 - 12:01 hrs",
+                fecha_hora = "25-03-2026 - 12:01 hrs",
                 responsable = usuarioEjemplo,
                 estadoActual = "Operativo",
                 descripcion = "Este rack esta pulento",
@@ -47,7 +47,7 @@ class RackRepository(context: Context) {
             ),
             Rack(
                 id = "67",
-                fechaHora = "02-04-2026 - 09:35 hrs",
+                fecha_hora = "02-04-2026 - 09:35 hrs",
                 responsable = usuarioEjemplo,
                 estadoActual = "En Revisión",
                 descripcion = "pipipipi",
@@ -55,7 +55,7 @@ class RackRepository(context: Context) {
             ),
             Rack(
                 id = "69",
-                fechaHora = "22-05-2026 - 15:55 hrs",
+                fecha_hora = "22-05-2026 - 15:55 hrs",
                 responsable = usuarioEjemplo,
                 estadoActual = "Operativo",
                 descripcion = "very nice",
@@ -63,7 +63,7 @@ class RackRepository(context: Context) {
             ),
             Rack(
                 id = "666",
-                fechaHora = "26-05-2026 - 08:23 hrs",
+                fecha_hora = "26-05-2026 - 08:23 hrs",
                 responsable = usuarioEjemplo,
                 estadoActual = "Critico",
                 descripcion = "que buen espectaculo",

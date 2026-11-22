@@ -172,7 +172,7 @@ fun MenuInspector(
                         // Renderizado dinámico de la lista obtenida del ViewModel
                         items(listaRacks) { rack ->
                             ItemLog(
-                                fecha = rack.fechaHora,
+                                fecha = rack.fecha_hora,
                                 rack = "N° ${rack.id}",
                                 descripcion = rack.descripcion
                             )
