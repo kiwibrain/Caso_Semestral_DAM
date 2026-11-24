@@ -44,5 +44,17 @@ fun Navegacion() {
             DetalleRack(navController = navController, rackId = rackId)
         }
 
+        composable("lista_usuarios") {
+            ListaUsuarios(navController = navController)
+        }
+
+        composable(
+            route = "editar_usuario/{usuarioId}",
+            arguments = listOf(navArgument("usuarioId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val usuarioId = backStackEntry.arguments?.getString("usuarioId") ?: ""
+            EditarUsuario(navController = navController, usuarioId = usuarioId)
+        }
+
     }
 }

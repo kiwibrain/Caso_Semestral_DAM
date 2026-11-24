@@ -51,9 +51,7 @@ fun MenuSupervisor(
                 .padding(start = 16.dp, end = 16.dp, top = 35.dp),
             contentAlignment = Alignment.CenterStart
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(id = R.drawable.tulio),
                     contentDescription = "icono supervisor",
@@ -77,7 +75,7 @@ fun MenuSupervisor(
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         Column(
             modifier = Modifier
@@ -86,66 +84,71 @@ fun MenuSupervisor(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row {
+            Text(
+                text = "Sistema de Registro Racks",
+                color = Color.Black,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botón: NUEVO REGISTRO
+            Button(
+                onClick = { navController.navigate("nuevo_registro") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
+                shape = RoundedCornerShape(24.dp),
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .height(48.dp)
+            ) {
                 Text(
-                    text = "Sistema de Registro Racks",
-                    color = Color.Black,
-                    fontSize = 24.sp,
+                    text = "NUEVO REGISTRO",
+                    color = Color.White,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            // Botón: NUEVO REGISTRO
-            Box(
+            // Botón: CREAR USUARIO
+            Button(
+                onClick = { navController.navigate("nuevo_usuario") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
+                shape = RoundedCornerShape(24.dp),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth(0.7f)
+                    .height(48.dp)
             ) {
-                Button(
-                    onClick = { navController.navigate("nuevo_registro") },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
-                    shape = RoundedCornerShape(24.dp),
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .height(50.dp)
-                ) {
-                    Text(
-                        text = "NUEVO REGISTRO",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                Text(
+                    text = "CREAR USUARIO",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
-            // Botón extra del Supervisor: CREAR USUARIO
-            Box(
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Botón NUEVO: VER USUARIOS
+            Button(
+                onClick = { navController.navigate("lista_usuarios") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
+                shape = RoundedCornerShape(24.dp),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth(0.7f)
+                    .height(48.dp)
             ) {
-                Button(
-                    onClick = { navController.navigate("nuevo_usuario") },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
-                    shape = RoundedCornerShape(24.dp),
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .height(50.dp)
-                ) {
-                    Text(
-                        text = "CREAR USUARIO",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                Text(
+                    text = "VER USUARIOS",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             // Botón cerrar sesión mediante el ViewModel
             Button(
@@ -166,22 +169,18 @@ fun MenuSupervisor(
                 Text(
                     text = "Cerrar Sesión",
                     color = Color.White,
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
 
-            Spacer(modifier = Modifier.height(18.dp))
-
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp, horizontal = 24.dp),
+                    .padding(vertical = 12.dp, horizontal = 24.dp),
                 thickness = 2.dp,
                 color = Color(0xFF3B59C8)
             )
-
-            Spacer(modifier = Modifier.height(10.dp))
 
             // Cuadro de logs iterando la base de datos
             Column(
