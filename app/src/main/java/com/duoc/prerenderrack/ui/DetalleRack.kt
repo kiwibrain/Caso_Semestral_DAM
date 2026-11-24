@@ -1,5 +1,6 @@
 package com.duoc.prerenderrack.ui
 
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -9,9 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -22,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.duoc.prerenderrack.R
 import com.duoc.prerenderrack.viewmodel.RackViewModel
+import java.io.File
 
 @Composable
 fun DetalleRack(
@@ -137,26 +141,53 @@ fun DetalleRack(
                             .height(200.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        val context = LocalContext.current
-                        val nombreImagen = rack.fotoUri ?: "sin_imagen"
+                        val foto = rack.fotoUri ?: ""
 
-                        val imageResId = context.resources.getIdentifier(
-                            nombreImagen,
-                            "drawable",
-                            context.packageName
-                        )
+                        val bitmapLocal = remember(foto) {
+                            if (foto.isNotBlank()) {
+                                val archivo = File(foto)
+                                if (archivo.exists()) {
+                                    BitmapFactory.decodeFile(archivo.absolutePath)?.asImageBitmap()
+                                } else {
+                                    null
+                                }
+                            } else {
+                                null
+                            }
+                        }
 
-                        val recursoFinal = if (imageResId != 0) imageResId else R.drawable.tulio
+                        if (bitmapLocal != null) {
+                            Image(
+                                bitmap = bitmapLocal,
+                                contentDescription = "Fotografía del rack",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .width(130.dp)
+                                    .height(200.dp)
+                                    .background(Color.Gray)
+                            )
+                        } else {
+                            val context = LocalContext.current
+                            val nombreImagen = foto.ifBlank { "rack01" }
 
-                        Image(
-                            painter = painterResource(id = recursoFinal),
-                            contentDescription = "Fotografía del rack",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .width(130.dp)
-                                .height(200.dp)
-                                .background(Color.Gray)
-                        )
+                            val imageResId = context.resources.getIdentifier(
+                                nombreImagen,
+                                "drawable",
+                                context.packageName
+                            )
+
+                            val recursoFinal = if (imageResId != 0) imageResId else R.drawable.rack01
+
+                            Image(
+                                painter = painterResource(id = recursoFinal),
+                                contentDescription = "Fotografía del rack",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .width(130.dp)
+                                    .height(200.dp)
+                                    .background(Color.Gray)
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))

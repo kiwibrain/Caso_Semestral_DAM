@@ -1,6 +1,7 @@
 package com.duoc.prerenderrack.ui
 
 import android.Manifest
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
@@ -22,12 +23,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.duoc.prerenderrack.model.Rack
+import com.duoc.prerenderrack.viewmodel.RackViewModel
 import java.io.File
+import java.io.FileOutputStream
 
 @Composable
-fun VistaNuevoRegistro(navController: NavController) {
+fun VistaNuevoRegistro(
+    navController: NavController,
+    rackViewModel: RackViewModel = viewModel()
+) {
     val context = LocalContext.current
+    val cargando by rackViewModel.cargando.collectAsState()
+    val mensajeErrorVm by rackViewModel.mensajeError.collectAsState()
+
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
     var permisoConcedido by remember { mutableStateOf(false) }
@@ -38,8 +49,9 @@ fun VistaNuevoRegistro(navController: NavController) {
     val estadoRevision = listOf(
         "Pendiente",
         "En Revision",
-        "Finalizado")
-    var estadoSeleccionado by remember {mutableStateOf(0)}
+        "Finalizado"
+    )
+    var estadoSeleccionado by remember { mutableStateOf(0) }
     var modalError by remember { mutableStateOf(false) }
     var mensajeModal by remember { mutableStateOf("") }
 
@@ -75,8 +87,6 @@ fun VistaNuevoRegistro(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF88BBFF))
-            .height(100.dp)
-
     ) {
         // 1. Box encabezado
         item {
@@ -97,249 +107,277 @@ fun VistaNuevoRegistro(navController: NavController) {
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
-        //Fin encabezado
 
+        // 2. Modelo
+        item {
+            Text(
+                text = "Modelo:",
+                color = Color(0xFF1E2749),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 10.dp, bottom = 6.dp)
+            )
+            OutlinedTextField(
+                value = modelo,
+                onValueChange = { modelo = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp)
+                    .padding(start = 10.dp, end = 10.dp),
+                shape = RoundedCornerShape(25.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    cursorColor = Color.Black
+                )
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+        }
 
-            // 2. Modelo
-                item {
-                    Text(
-                        text = "Modelo:",
-                        color = Color(0xFF1E2749),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
-                    )
-                    OutlinedTextField(
-                        value = modelo,
-                        onValueChange = { modelo = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(55.dp)
-                            .padding(start = 10.dp, end = 10.dp),
-                        shape = RoundedCornerShape(25.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            cursorColor = Color.Black
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                }
-                //Fin text field Modelo
+        // 3. Fecha/hora
+        item {
+            Text(
+                text = "Fecha/Hora:",
+                color = Color(0xFF1E2749),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 10.dp, bottom = 6.dp)
+            )
+            OutlinedTextField(
+                value = fecha_hora,
+                onValueChange = { fecha_hora = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp)
+                    .padding(start = 10.dp, end = 10.dp),
+                shape = RoundedCornerShape(25.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    cursorColor = Color.Black
+                )
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+        }
 
-                // 3. Fecha/hora
-                item {
-                    Text(
-                        text = "Fecha/Hora:",
-                        color = Color(0xFF1E2749),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
-                    )
-                    OutlinedTextField(
-                        value = fecha_hora,
-                        onValueChange = { fecha_hora = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(55.dp)
-                            .padding(start = 10.dp, end = 10.dp),
-                        shape = RoundedCornerShape(25.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            cursorColor = Color.Black
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                }
-                //Fin text field fecha/hora
+        // 4. Responsable
+        item {
+            Text(
+                text = "Responsable:",
+                color = Color(0xFF1E2749),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 10.dp, bottom = 6.dp)
+            )
+            OutlinedTextField(
+                value = responsable,
+                onValueChange = { responsable = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp)
+                    .padding(start = 10.dp, end = 10.dp),
+                shape = RoundedCornerShape(25.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    cursorColor = Color.Black
+                )
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+        }
 
-                // 4. Responsable
-                item {
-                    Text(
-                        text = "Responsable:",
-                        color = Color(0xFF1E2749),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
-                    )
-                    OutlinedTextField(
-                        value = responsable,
-                        onValueChange = { responsable = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(55.dp)
-                            .padding(start = 10.dp, end = 10.dp),
-                        shape = RoundedCornerShape(25.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            cursorColor = Color.Black
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                }
-                //Fin text field  responsable
+        // 5. Descripcion
+        item {
+            Text(
+                text = "Descripcion:",
+                color = Color(0xFF1E2749),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 10.dp, bottom = 6.dp)
+            )
+            OutlinedTextField(
+                value = descripcion,
+                onValueChange = { descripcion = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .padding(start = 10.dp, end = 10.dp),
+                shape = RoundedCornerShape(25.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    cursorColor = Color.Black
+                )
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
 
-                // 7. Descripcion
-                item {
-                    Text(
-                        text = "Descripcion:",
-                        color = Color(0xFF1E2749),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
-                    )
-                    OutlinedTextField(
-                        value = descripcion,
-                        onValueChange = { descripcion = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp)
-                            .padding(start = 10.dp, end = 10.dp),
-                        shape = RoundedCornerShape(25.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            cursorColor = Color.Black
-                        )
+        // 6. Foto del Rack y Botones estado
+        item {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Fotografia del Rack:",
+                    color = Color(0xFF1E2749),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(start = 10.dp, bottom = 6.dp)
+                )
+
+                if (bitmap != null) {
+                    Image(
+                        bitmap = bitmap!!.asImageBitmap(),
+                        contentDescription = "Foto del Rack",
+                        modifier = Modifier.size(200.dp)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                } // Fin text field descripcion
+                }
 
-                // 7. Foto del Rack y Botones estado
-                item {
-                    Column(
+                Button(onClick = {
+                    cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                }) {
+                    Text("Tomar foto del Rack")
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(
+                        text = "Estado Actual:",
+                        color = Color(0xFF1E2749),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-
-                        Text(
-                            text = "Fotografia del Rack:",
-                            color = Color(0xFF1E2749),
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier
-                                .align(Alignment.Start)
-                                .padding(start = 10.dp,bottom = 6.dp)
-                        )
-
-                        if (bitmap != null) {
-                            Image(
-                                bitmap = bitmap!!.asImageBitmap(),
-                                contentDescription = "Foto del Rack",
-                                modifier = Modifier.size(200.dp)
+                            .align(Alignment.Start)
+                            .padding(start = 10.dp, bottom = 6.dp)
+                    )
+                    estadoRevision.forEachIndexed { index, opcion ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(
+                                selected = estadoSeleccionado == index,
+                                onClick = { estadoSeleccionado = index }
                             )
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(opcion)
                         }
-
-                        Button(onClick = {
-                            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
-                        }) {
-                            Text("Tomar foto del Rack")
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.Start
-                        ) {
-                            Text(
-                                text = "Estado Actual:",
-                                color = Color(0xFF1E2749),
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier
-                                    .align(Alignment.Start)
-                                    .padding(start = 10.dp,bottom = 6.dp)
-                            )
-                            estadoRevision.forEachIndexed { index, opcion ->
-                                Row(verticalAlignment = Alignment.CenterVertically){
-                                    RadioButton(
-                                        selected = estadoSeleccionado == index,
-                                        onClick = {estadoSeleccionado = index}
-                                    )
-                                    Text(opcion)
-                                }
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Button(
-                                onClick = {
-                                    when{
-                                        modelo.isBlank() -> {
-                                            mensajeModal = "Modelo de rack no debe estar vacio."
-                                            modalError = true }
-                                        fecha_hora.isBlank() -> {
-                                            mensajeModal = "Fecha de registro no debe estar vacia."
-                                            modalError = true }
-                                        responsable.isBlank() -> {
-                                            mensajeModal = "Nombre del responsable no debe estar vacio."
-                                            modalError = true }
-                                        descripcion.isBlank() -> {
-                                            mensajeModal = "Descripción no debe estar vacio."
-                                            modalError = true }
-                                        else -> {
-                                            navController.popBackStack() }
-                                    }
-                                },
-                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
-                            ) {
-                                Text(
-                                    text = "Guardar",
-                                    color = Color.White,
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                            //Fin boton guardar
-
-                            Spacer(modifier = Modifier.width(16.dp))
-
-                            Button(
-                                onClick = { navController.popBackStack() },
-                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
-                            ) {
-                                Text(
-                                    text = "Volver",
-                                    color = Color.White,
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                            //Fin boton volver
-                        }
-                        Spacer(modifier = Modifier.height(50.dp))
                     }
                 }
 
+                Spacer(modifier = Modifier.height(16.dp))
 
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        enabled = !cargando,
+                        onClick = {
+                            when {
+                                modelo.isBlank() -> {
+                                    mensajeModal = "Modelo de rack no debe estar vacio."
+                                    modalError = true
+                                }
+                                fecha_hora.isBlank() -> {
+                                    mensajeModal = "Fecha de registro no debe estar vacia."
+                                    modalError = true
+                                }
+                                responsable.isBlank() -> {
+                                    mensajeModal = "Nombre del responsable no debe estar vacio."
+                                    modalError = true
+                                }
+                                descripcion.isBlank() -> {
+                                    mensajeModal = "Descripción no debe estar vacio."
+                                    modalError = true
+                                }
+                                else -> {
+                                    val rutaFotoLocal = bitmap?.let { bmp ->
+                                        guardarBitmapEnInterno(context, bmp)
+                                    }
+                                    val estadoElegido = estadoRevision[estadoSeleccionado]
 
-    }//fin lazycolumn
+                                    val nuevoRack = Rack(
+                                        id = "",
+                                        fecha_hora = fecha_hora.trim(),
+                                        modelo = modelo.trim(),
+                                        responsable = responsable.trim(),
+                                        estadoActual = estadoElegido,
+                                        descripcion = descripcion.trim(),
+                                        fotoUri = rutaFotoLocal,
+                                        estadoRevision = estadoElegido
+                                    )
 
-    //MODAL
-    if (modalError){
+                                    rackViewModel.crearRack(
+                                        rack = nuevoRack,
+                                        onExito = { navController.popBackStack() }
+                                    )
+                                }
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
+                    ) {
+                        Text(
+                            text = if (cargando) "Guardando..." else "Guardar",
+                            color = Color.White,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    Button(
+                        onClick = { navController.popBackStack() },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B))
+                    ) {
+                        Text(
+                            text = "Volver",
+                            color = Color.White,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(50.dp))
+            }
+        }
+    }
+
+    if (modalError) {
         ModalAlerta(
             titulo = "Error",
             mensaje = mensajeModal,
             onDismiss = { modalError = false }
         )
     }
+
+    if (mensajeErrorVm != null) {
+        ModalAlerta(
+            titulo = "Error al guardar",
+            mensaje = mensajeErrorVm!!,
+            onDismiss = { rackViewModel.limpiarError() }
+        )
+    }
+}
+
+private fun guardarBitmapEnInterno(context: Context, bitmap: Bitmap): String {
+    val archivo = File(context.filesDir, "rack_${System.currentTimeMillis()}.jpg")
+    FileOutputStream(archivo).use { salida ->
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, salida)
+    }
+    return archivo.absolutePath
 }
