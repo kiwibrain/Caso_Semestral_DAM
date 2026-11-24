@@ -1,12 +1,12 @@
 package com.duoc.prerenderrack.repository
 
 import com.duoc.prerenderrack.model.Rack
+import com.duoc.prerenderrack.remote.RackApiService
 import com.duoc.prerenderrack.remote.RetrofitInstance
 
-class RackRepository {
-
-    private val api = RetrofitInstance.apiRacks
-
+class RackRepository (
+    private val api: RackApiService = RetrofitInstance.apiRacks
+){
     suspend fun obtenerRacks(): List<Rack> {
         return api.getRacks()
     }

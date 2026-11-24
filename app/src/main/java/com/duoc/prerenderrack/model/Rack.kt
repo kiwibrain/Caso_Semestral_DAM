@@ -1,6 +1,6 @@
 package com.duoc.prerenderrack.model
 
-class Rack(
+data class Rack(
     val id: String,
     var fecha_hora: String,
     var modelo : String,

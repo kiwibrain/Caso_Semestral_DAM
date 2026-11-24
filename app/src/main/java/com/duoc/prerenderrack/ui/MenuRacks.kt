@@ -70,7 +70,7 @@ fun MenuRacks(navController: NavController){
                             ) {
                                 Text("Descripción de ejemplo...", fontSize = 14.sp)
                                 Button(
-                                    onClick = { navController.navigate("detalle_rack") },
+                                    onClick = { navController.navigate("detalle-rack") },
                                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B59C8)),
                                     modifier = Modifier.height(35.dp)
                                 ) {
