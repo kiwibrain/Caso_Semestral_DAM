@@ -7,6 +7,6 @@ data class Rack(
     var responsable: String,
     var estadoActual: String,
     var descripcion: String,
-    val fotoUri: String? = null, // Cambiado de Uri a String para compatibilidad con Gson
+    val fotoUri: String? = null,
     var estadoRevision: String
 )
