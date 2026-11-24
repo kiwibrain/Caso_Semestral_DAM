@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -29,7 +30,12 @@ fun DetalleRack(
     rackViewModel: RackViewModel = viewModel()
 ) {
     val racks by rackViewModel.racks.collectAsState()
-    val rack = racks.find { it.id == rackId }
+    val rack = racks.find { it.id.toString() == rackId }
+
+    // Carga los racks desde Xano al entrar al detalle
+    LaunchedEffect(rackId) {
+        rackViewModel.cargarRacks()
+    }
 
     val colorFondo = Color(0xFF90CAF9)
     val colorEncabezado = Color(0xFF3F51B5)

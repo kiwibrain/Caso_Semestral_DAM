@@ -1,6 +1,5 @@
 package com.duoc.prerenderrack.ui
 
-import android.content.Context // <-- Importante
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,33 +12,34 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext // <-- Importante
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.duoc.prerenderrack.viewmodel.UsuarioViewModel
 
 @Composable
-fun PantallaLogin(navController: NavController){
-    val context = LocalContext.current // <-- Obtener contexto
-    val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE) // <-- Instanciar preferencias
-    val scope = rememberCoroutineScope()
+fun PantallaLogin(
+    navController: NavController,
+    usuarioViewModel: UsuarioViewModel = viewModel()
+) {
+    val cargando by usuarioViewModel.cargando.collectAsState()
+    val mensajeErrorVm by usuarioViewModel.mensajeError.collectAsState()
 
-    var cargandoGuardar by remember { mutableStateOf(false) }
-    var modalError by remember { mutableStateOf(false) }
     var correo by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
+    var errorRol by remember { mutableStateOf<String?>(null) }
+
+    val errorActual = mensajeErrorVm ?: errorRol
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF88BBFF))
-            .height(120.dp)
     ) {
-        //Box encabezado
+        // Box encabezado
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -54,52 +54,56 @@ fun PantallaLogin(navController: NavController){
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
-
         }
 
         Spacer(modifier = Modifier.height(12.dp))
-        //Formulario
-        Column{
-            //CORREO
-            Text("Correo:",
+
+        // Formulario
+        Column {
+            // CORREO
+            Text(
+                text = "Correo:",
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
+                modifier = Modifier.padding(start = 10.dp, bottom = 6.dp)
             )
             OutlinedTextField(
                 value = correo,
                 onValueChange = { correo = it },
+                singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(55.dp)
-                    .padding(start = 10.dp, end = 10.dp),
+                    .padding(horizontal = 10.dp),
                 shape = RoundedCornerShape(25.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
-                    cursorColor = Color.Black,
+                    cursorColor = Color.Black
                 )
             )
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            //CONTRASEÑA
-            Text("Contraseña:",
+            // CONTRASEÑA
+            Text(
+                text = "Contraseña:",
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 10.dp,bottom = 6.dp)
+                modifier = Modifier.padding(start = 10.dp, bottom = 6.dp)
             )
             OutlinedTextField(
                 value = contrasena,
                 onValueChange = { contrasena = it },
+                singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp)
-                    .padding(start = 10.dp, end = 10.dp),
+                    .padding(horizontal = 10.dp),
                 shape = RoundedCornerShape(25.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -114,9 +118,10 @@ fun PantallaLogin(navController: NavController){
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        // Botón Ingresar conectado al ViewModel
         BotonCargando(
             texto = "Ingresar",
-            cargando = cargandoGuardar,
+            cargando = cargando,
             modifier = Modifier
                 .width(300.dp)
                 .height(50.dp)
@@ -124,32 +129,22 @@ fun PantallaLogin(navController: NavController){
                 .align(Alignment.CenterHorizontally),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
             onClick = {
-                if (correo == "inspector@duoc.cl" && contrasena == "1234"){
-                    // GUARDAR SESIÓN LOCALMENTE
-                    sharedPreferences.edit().putString("logged_user", correo).apply()
-                    cargandoGuardar = true
-                    scope.launch {
-                        delay(2000)
-                        cargandoGuardar = false
-                        navController.navigate("menu-inspector") {
-                            popUpTo("pantalla_login") { inclusive = true }
+                usuarioViewModel.iniciarSesion(correo, contrasena) { usuarioEncontrado ->
+                    when (usuarioEncontrado.cargo) {
+                        "Supervisor" -> {
+                            navController.navigate("menu-supervisor") {
+                                popUpTo("pantalla_login") { inclusive = true }
+                            }
+                        }
+                        "Inspector", "OperadorTecnico", "Especialista Tecnico" -> {
+                            navController.navigate("menu-inspector") {
+                                popUpTo("pantalla_login") { inclusive = true }
+                            }
+                        }
+                        else -> {
+                            errorRol = "Rol '${usuarioEncontrado.cargo}' no reconocido."
                         }
                     }
-
-                } else if (correo == "supervisor@duoc.cl" && contrasena == "4321"){
-                    // GUARDAR SESIÓN LOCALMENTE
-                    sharedPreferences.edit().putString("logged_user", correo).apply()
-                    cargandoGuardar = true
-                    scope.launch {
-                        delay(2000)
-                        cargandoGuardar = false
-                        navController.navigate("menu-supervisor") {
-                            popUpTo("pantalla_login") { inclusive = true }
-                        }
-                    }
-
-                } else {
-                    modalError = true
                 }
             }
         )
@@ -159,7 +154,10 @@ fun PantallaLogin(navController: NavController){
         Button(
             onClick = { navController.navigate("pantalla_inicial") },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1C2C6B)),
-            modifier = Modifier.height(50.dp).padding(horizontal = 20.dp).align(Alignment.CenterHorizontally)
+            modifier = Modifier
+                .height(50.dp)
+                .padding(horizontal = 20.dp)
+                .align(Alignment.CenterHorizontally)
         ) {
             Text(
                 text = "Volver",
@@ -170,11 +168,14 @@ fun PantallaLogin(navController: NavController){
         }
     }
 
-    if (modalError){
+    if (errorActual != null) {
         ModalAlerta(
-            titulo = "Error",
-            mensaje = "Credenciales no valida",
-            onDismiss = { modalError = false }
+            titulo = "Error de inicio de sesión",
+            mensaje = errorActual,
+            onDismiss = {
+                usuarioViewModel.limpiarError()
+                errorRol = null
+            }
         )
     }
 }

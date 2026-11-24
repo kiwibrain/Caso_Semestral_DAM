@@ -9,7 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,17 +17,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.duoc.prerenderrack.R
-import com.duoc.prerenderrack.viewmodel.InspectorViewModel
+import com.duoc.prerenderrack.viewmodel.RackViewModel
+import com.duoc.prerenderrack.viewmodel.UsuarioViewModel
 
 @Composable
 fun MenuInspector(
     navController: NavController,
-    inspectorViewModel: InspectorViewModel // <-- Inyectamos el ViewModel
+    rackViewModel: RackViewModel = viewModel(),
+    usuarioViewModel: UsuarioViewModel = viewModel()
 ) {
-    val usuario = inspectorViewModel.usuarioActual
-    val listaRacks = inspectorViewModel.listaRacks
+    val usuario = remember { usuarioViewModel.obtenerUsuarioLogueado() }
+    val listaRacks by rackViewModel.racks.collectAsState()
+
+    // Carga los racks desde Xano al abrir la pantalla
+    LaunchedEffect(Unit) {
+        rackViewModel.cargarRacks()
+    }
 
     Column(
         modifier = Modifier
@@ -51,10 +59,9 @@ fun MenuInspector(
                 )
                 Spacer(modifier = Modifier.width(10.dp))
 
-                // Nombre y cargo dinámicos desde el ViewModel
                 Column {
                     Text(
-                        text = usuario?.nombre ?: "Cargando...",
+                        text = usuario?.nombre ?: "Inspector",
                         color = Color.White,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
@@ -115,10 +122,9 @@ fun MenuInspector(
             // Botón Cerrar Sesión mediante el ViewModel
             Button(
                 onClick = {
-                    inspectorViewModel.cerrarSesion {
-                        navController.navigate("pantalla_login") {
-                            popUpTo(0) { inclusive = true }
-                        }
+                    usuarioViewModel.cerrarSesion()
+                    navController.navigate("pantalla_login") {
+                        popUpTo(0) { inclusive = true }
                     }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB71C1C))
@@ -169,13 +175,23 @@ fun MenuInspector(
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        // Renderizado dinámico de la lista obtenida del ViewModel
                         items(listaRacks) { rack ->
                             ItemLog(
                                 fecha = rack.fecha_hora,
                                 rack = "N° ${rack.id}",
                                 descripcion = rack.descripcion
                             )
+                        }
+
+                        item {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Button(
+                                onClick = { navController.navigate("menu-racks") },
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B59C8)),
+                                modifier = Modifier.padding(top = 8.dp)
+                            ) {
+                                Text("Ver más", color = Color.White, fontWeight = FontWeight.Bold)
+                            }
                         }
                     }
                 }

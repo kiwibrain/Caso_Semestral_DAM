@@ -2,14 +2,11 @@ package com.duoc.prerenderrack.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.duoc.prerenderrack.viewmodel.InspectorViewModel
-import com.duoc.prerenderrack.viewmodel.InspectorViewModelFactory
 
 @Composable
 fun Navegacion() {
@@ -24,10 +21,7 @@ fun Navegacion() {
             PantallaLogin(navController)
         }
         composable("menu-inspector") {
-            val inspectorViewModel: InspectorViewModel = viewModel(
-                factory = InspectorViewModelFactory(context)
-            )
-            MenuInspector(navController, inspectorViewModel)
+            MenuInspector(navController)
         }
         composable("nuevo_registro") {
             VistaNuevoRegistro(navController)

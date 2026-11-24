@@ -1,19 +1,29 @@
 package com.duoc.prerenderrack.repository
 
 import com.duoc.prerenderrack.model.Rack
-import com.duoc.prerenderrack.remote.RetrofitInstance // Asegúrate de tener configurada esta clase en tu proyecto
+import com.duoc.prerenderrack.remote.RetrofitInstance
 
 class RackRepository {
 
-    // Función suspendida para obtener los datos desde la API/Base de datos
-    suspend fun getRacks(): List<Rack> {
-        return RetrofitInstance.api.getRacks()
+    private val api = RetrofitInstance.apiRacks
+
+    suspend fun obtenerRacks(): List<Rack> {
+        return api.getRacks()
     }
 
-    // Si tu API también tiene un endpoint para guardar (POST), se adaptaría de esta forma:
-    /*
-    suspend fun guardarRack(rack: Rack) {
-        RetrofitInstance.api.createRack(rack)
+    suspend fun obtenerRackPorId(id: String): Rack {
+        return api.getRackById(id)
     }
-    */
+
+    suspend fun crearRack(rack: Rack): Rack {
+        return api.createRack(rack)
+    }
+
+    suspend fun actualizarRack(id: String, rack: Rack): Rack {
+        return api.updateRack(id, rack)
+    }
+
+    suspend fun eliminarRack(id: String) {
+        api.deleteRack(id)
+    }
 }
