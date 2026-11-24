@@ -2,8 +2,10 @@ package com.duoc.prerenderrack.ui
 
 import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,10 +24,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.duoc.prerenderrack.model.Rack
+import com.duoc.prerenderrack.util.NotificacionHelper
 import com.duoc.prerenderrack.viewmodel.RackViewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -41,12 +45,12 @@ fun VistaNuevoRegistro(
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
-    var permisoConcedido by remember { mutableStateOf(false) }
     var modelo by remember { mutableStateOf("") }
-    var fecha_hora by remember { mutableStateOf("") }
+    var fechaHora by remember { mutableStateOf("") }
     var responsable by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
-    val estadoRevision = listOf(
+
+    val opcionesEstado = listOf(
         "Pendiente",
         "En Revision",
         "Finalizado"
@@ -54,6 +58,24 @@ fun VistaNuevoRegistro(
     var estadoSeleccionado by remember { mutableStateOf(0) }
     var modalError by remember { mutableStateOf(false) }
     var mensajeModal by remember { mutableStateOf("") }
+
+    // Solicitud de permiso de notificaciones (Android 13+)
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* El resultado se valida en NotificacionHelper antes de notificar */ }
+
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val tienePermiso = ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+
+            if (!tienePermiso) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
 
     // Lanzador de cámara
     val takePictureLauncher = rememberLauncherForActivityResult(
@@ -65,11 +87,10 @@ fun VistaNuevoRegistro(
         }
     }
 
-    // Permiso de cámara
+    // Lanzador de permiso de cámara
     val cameraPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
-        permisoConcedido = granted
         if (granted) {
             val file = File.createTempFile("profile_photo", ".jpg", context.cacheDir)
             file.deleteOnExit()
@@ -88,7 +109,7 @@ fun VistaNuevoRegistro(
             .fillMaxSize()
             .background(Color(0xFF88BBFF))
     ) {
-        // 1. Box encabezado
+        // 1. Encabezado
         item {
             Box(
                 modifier = Modifier
@@ -108,7 +129,7 @@ fun VistaNuevoRegistro(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // 2. Modelo
+        // 2. Campo Modelo
         item {
             Text(
                 text = "Modelo:",
@@ -136,7 +157,7 @@ fun VistaNuevoRegistro(
             Spacer(modifier = Modifier.height(12.dp))
         }
 
-        // 3. Fecha/hora
+        // 3. Campo Fecha/Hora
         item {
             Text(
                 text = "Fecha/Hora:",
@@ -146,8 +167,8 @@ fun VistaNuevoRegistro(
                 modifier = Modifier.padding(start = 10.dp, bottom = 6.dp)
             )
             OutlinedTextField(
-                value = fecha_hora,
-                onValueChange = { fecha_hora = it },
+                value = fechaHora,
+                onValueChange = { fechaHora = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(55.dp)
@@ -164,7 +185,7 @@ fun VistaNuevoRegistro(
             Spacer(modifier = Modifier.height(12.dp))
         }
 
-        // 4. Responsable
+        // 4. Campo Responsable
         item {
             Text(
                 text = "Responsable:",
@@ -192,10 +213,10 @@ fun VistaNuevoRegistro(
             Spacer(modifier = Modifier.height(12.dp))
         }
 
-        // 5. Descripcion
+        // 5. Campo Descripción
         item {
             Text(
-                text = "Descripcion:",
+                text = "Descripción:",
                 color = Color(0xFF1E2749),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
@@ -220,14 +241,14 @@ fun VistaNuevoRegistro(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // 6. Foto del Rack y Botones estado
+        // 6. Fotografía, Estado y Botones de acción
         item {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Fotografia del Rack:",
+                    text = "Fotografía del Rack:",
                     color = Color(0xFF1E2749),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -266,7 +287,7 @@ fun VistaNuevoRegistro(
                             .align(Alignment.Start)
                             .padding(start = 10.dp, bottom = 6.dp)
                     )
-                    estadoRevision.forEachIndexed { index, opcion ->
+                    opcionesEstado.forEachIndexed { index, opcion ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             RadioButton(
                                 selected = estadoSeleccionado == index,
@@ -289,32 +310,34 @@ fun VistaNuevoRegistro(
                         onClick = {
                             when {
                                 modelo.isBlank() -> {
-                                    mensajeModal = "Modelo de rack no debe estar vacio."
+                                    mensajeModal = "El modelo del rack no debe estar vacío."
                                     modalError = true
                                 }
-                                fecha_hora.isBlank() -> {
-                                    mensajeModal = "Fecha de registro no debe estar vacia."
+                                fechaHora.isBlank() -> {
+                                    mensajeModal = "La fecha de registro no debe estar vacía."
                                     modalError = true
                                 }
                                 responsable.isBlank() -> {
-                                    mensajeModal = "Nombre del responsable no debe estar vacio."
+                                    mensajeModal = "El nombre del responsable no debe estar vacío."
                                     modalError = true
                                 }
                                 descripcion.isBlank() -> {
-                                    mensajeModal = "Descripción no debe estar vacio."
+                                    mensajeModal = "La descripción no debe estar vacía."
                                     modalError = true
                                 }
                                 else -> {
                                     val rutaFotoLocal = bitmap?.let { bmp ->
                                         guardarBitmapEnInterno(context, bmp)
                                     }
-                                    val estadoElegido = estadoRevision[estadoSeleccionado]
+                                    val estadoElegido = opcionesEstado[estadoSeleccionado]
+                                    val modeloLimpio = modelo.trim()
+                                    val responsableLimpio = responsable.trim()
 
                                     val nuevoRack = Rack(
                                         id = "",
-                                        fecha_hora = fecha_hora.trim(),
-                                        modelo = modelo.trim(),
-                                        responsable = responsable.trim(),
+                                        fecha_hora = fechaHora.trim(),
+                                        modelo = modeloLimpio,
+                                        responsable = responsableLimpio,
                                         estadoActual = estadoElegido,
                                         descripcion = descripcion.trim(),
                                         fotoUri = rutaFotoLocal,
@@ -323,7 +346,14 @@ fun VistaNuevoRegistro(
 
                                     rackViewModel.crearRack(
                                         rack = nuevoRack,
-                                        onExito = { navController.popBackStack() }
+                                        onExito = {
+                                            NotificacionHelper.mostrarNotificacionRackGuardado(
+                                                context = context,
+                                                modeloRack = modeloLimpio,
+                                                responsable = responsableLimpio
+                                            )
+                                            navController.popBackStack()
+                                        }
                                     )
                                 }
                             }
@@ -373,6 +403,7 @@ fun VistaNuevoRegistro(
         )
     }
 }
+
 
 private fun guardarBitmapEnInterno(context: Context, bitmap: Bitmap): String {
     val archivo = File(context.filesDir, "rack_${System.currentTimeMillis()}.jpg")
